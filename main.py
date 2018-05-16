@@ -1,42 +1,32 @@
-# general imports
 import tkinter as tk
 
-LARGE_FONT = ("Verdana", 12)
+root = tk.Tk()
+
+v = tk.IntVar()
+v.set(1)  # initializing the choice, i.e. Python
+
+types = ["Shaped", "Shapeless"]
+
+tk.Label(root,
+         text="""Choose the type of recipe:""",
+         justify=tk.LEFT,
+         padx=20).pack()
+
+for val, language in enumerate(types):
+    tk.Radiobutton(root,
+                   text=language,
+                   padx=20,
+                   variable=v,
+                   value=val).pack(anchor=tk.W)
+
+print(v.get())
 
 
-class RecipeGenerator(tk.Tk):
+master = tk.Tk()
+tk.Label(master, text="Output").grid(row=0)
 
-    def __init__(self, *args, **kwargs):
-        tk.Tk.__init__(self, *args, **kwargs)
-        container = tk.Frame(self)
+e1 = tk.Entry(master)
 
-        container.pack(side="top", fill="both", expand=True)
-
-        container.grid_rowconfigure(0, weight=1)
-        container.grid_columnconfigure(0, weight=1)
-
-        self.frames = {}
-
-        frame = StartPage(container, self)
-
-        self.frames[StartPage] = frame
-
-        frame.grid(row=0, column=0, sticky="nsew")
-
-        self.show_frame(StartPage)
-
-    def show_frame(self, cont):
-        frame = self.frames[cont]
-        frame.tkraise()
-
-
-class StartPage(tk.Frame):
-
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Start Page", font=LARGE_FONT)
-        label.pack(pady=10, padx=10)
-
-
-app = RecipeGenerator()
-app.mainloop()
+e1.grid(row=0, column=1)
+print(e1.get())
+root.mainloop()

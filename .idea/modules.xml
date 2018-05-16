@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/MinecraftRecipeGenerator.iml" filepath="$PROJECT_DIR$/.idea/MinecraftRecipeGenerator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/RecipeGenerator.iml" filepath="$PROJECT_DIR$/.idea/RecipeGenerator.iml" />
     </modules>
   </component>
 </project>

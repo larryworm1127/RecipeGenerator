@@ -1,30 +1,44 @@
+"""
+This module contains two classes for two different
+types of crafting recipes: Shaped and Shapeless
+
+May 16, 2018
+Larry Shi
+"""
+
+
 class ShapelessRecipe:
 
-    def __init__(self, name, output, ingredient):
+    def __init__(self, name, output, item_input, block_input):
         self._name = name
         self._output = output
-        self._ingredient = ingredient
+        self._item_input = item_input
+        self._block_input = block_input
+        self._type = "crafting_shapeless"
 
     def __str__(self):
-        return "Name: %s\nOutput: %s\nIngredients: %s" % (
-            self._name, self._output, self._ingredient)
+        return "Name: %s\nOutput: %s\nItem Input: %s\nBlock Input: %s\nType: %s\n" % (
+            self._name, self._output, self._item_input, self._block_input, self._type)
 
     def get_name(self):
         return self._name
 
+    def get_item_input(self):
+        return self._item_input
+
     def get_output(self):
         return self._output
 
-    def get_ingredient(self):
-        return self._ingredient
+    def get_block_input(self):
+        return self._block_input
 
     def get_type(self):
-        return "minecraft:crafting_shapeless"
+        return "minecraft:" + self._type
 
 
 class ShapedRecipe:
 
-    def __init__(self, name, output, item_input, pattern, block_input=None):
+    def __init__(self, name, output, item_input, block_input, pattern):
         self._name = name
         self._output = output
         self._item_input = item_input
@@ -33,8 +47,8 @@ class ShapedRecipe:
         self._type = "crafting_shaped"
 
     def __str__(self):
-        return "Name: %s\nOutput: %s\nItem Input: %s\nBlock Input: %s\nPattern: %s\n" % (
-            self._name, self._output, self._item_input, self._block_input, self._pattern)
+        return "Name: %s\nOutput: %s\nItem Input: %s\nBlock Input: %s\nPattern: %s\nType: %s\n" % (
+            self._name, self._output, self._item_input, self._block_input, self._pattern, self._type)
 
     def get_name(self):
         return self._name
@@ -53,4 +67,3 @@ class ShapedRecipe:
 
     def get_type(self):
         return "minecraft:" + self._type
-

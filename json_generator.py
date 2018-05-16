@@ -14,17 +14,19 @@ RECIPE_PATH = expanduser('~')
 
 
 class Json:
-
     def __init__(self, recipe):
         self._recipe = recipe
         self._result = {}
 
-        self.json_data()
+        if recipe.get_type() == "minecraft:crafting_shaped":
+            self.create_shaped_json()
+        else:
+            self.create_shapeless_json()
 
     def __str__(self):
         return str(self._result)
 
-    def json_data(self):
+    def create_shaped_json(self):
         self._result["type"] = self._recipe.get_type()
         self._result["pattern"] = self._recipe.get_pattern()
 
@@ -45,13 +47,24 @@ class Json:
         self._result["result"] = {}
         self._result["result"][output[0]] = output[1]
 
+    def create_shapeless_json(self):
+        self._result["type"] = self._recipe.get_type()
+
+        self._result["ingredients"] = []
+        item_input = self._recipe.get_item_input()
+        if item_input is not None:
+            for value in item_input:
+                self._result["ingredients"].append({"item": value})
+
+        block_input = self._recipe.get_block_input()
+        if block_input is not None:
+            for value in block_input:
+                self._result["ingredients"].append({"item": value})
+
+        output = self._recipe.get_output()
+        self._result["result"] = {}
+        self._result["result"][output[0]] = output[1]
+
 
 def generator(recipe):
-    result = {}
-
-    output = recipe.get_output()
-    ingredient = recipe.get_ingredient()
-    recipe_type = recipe.get_type()
-
-    if recipe_type == "shapeless":
-        pass
+    pass

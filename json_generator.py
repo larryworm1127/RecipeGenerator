@@ -14,8 +14,10 @@ RECIPE_PATH = expanduser('~')
 
 
 class Json:
+
     def __init__(self, recipe):
         self._recipe = recipe
+        self._name = recipe.get_name()
         self._result = {}
 
         if recipe.get_type() == "minecraft:crafting_shaped":
@@ -25,6 +27,12 @@ class Json:
 
     def __str__(self):
         return str(self._result)
+
+    def get_json(self):
+        return self._result
+
+    def get_name(self):
+        return self._name
 
     def create_shaped_json(self):
         self._result["type"] = self._recipe.get_type()
@@ -66,5 +74,7 @@ class Json:
         self._result["result"][output[0]] = output[1]
 
 
-def generator(recipe):
-    pass
+def generator(recipe_json):
+    path = join(RECIPE_PATH, recipe_json.get_name() + '.json')
+    with open(path, 'w') as outfile:
+        dump(recipe_json.get_json(), outfile)

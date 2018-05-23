@@ -1,32 +1,27 @@
-import tkinter as tk
+from tkinter import *
 
-root = tk.Tk()
+root = Tk()
 
-v = tk.IntVar()
-v.set(1)  # initializing the choice, i.e. Python
+root.grid_columnconfigure(2, minsize=8)
 
-types = ["Shaped", "Shapeless"]
+Label(root, text="Output").grid(row=1, sticky="W", columnspan=2)
+Label(root, text="Output Count").grid(row=1, column=3, sticky="W")
+Label(root, text="Pattern").grid(row=3, sticky="W")
+Label(root, text="Item Input").grid(row=6, sticky="W")
 
-tk.Label(root,
-         text="""Choose the type of recipe:""",
-         justify=tk.LEFT,
-         padx=20).pack()
-
-for val, language in enumerate(types):
-    tk.Radiobutton(root,
-                   text=language,
-                   padx=20,
-                   variable=v,
-                   value=val).pack(anchor=tk.W)
-
-print(v.get())
+output = Entry(root).grid(row=1, column=1)
+output_count = Entry(root).grid(row=1, column=4)
+pattern_row_one = Entry(root).grid(row=3, column=1)
+pattern_row_two = Entry(root).grid(row=4, column=1)
+pattern_row_three = Entry(root).grid(row=5, column=1)
 
 
-master = tk.Tk()
-tk.Label(master, text="Output").grid(row=0)
+item_input_count = 1
+block_input_count = 1
 
-e1 = tk.Entry(master)
+item_input = []
+block_input = []
+for column in range(item_input_count):
+    item_input.append(Entry(root).grid(row=6, column=column + 1))
 
-e1.grid(row=0, column=1)
-print(e1.get())
 root.mainloop()

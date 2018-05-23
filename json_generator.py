@@ -17,16 +17,23 @@ class Json:
 
     def __init__(self, recipe):
         self._recipe = recipe
-        self._name = recipe.get_name()
-        self._result = {}
+        self._name = self._recipe.get_name()
+        self._type = self._recipe.get_type()
 
-        if recipe.get_type() == "minecraft:crafting_shaped":
+        if self._type == "crafting_shaped":
+            self._result = {"type": self._type,
+                            "pattern": [],
+                            "key": {},
+                            "result": {}}
             self.create_shaped_json()
         else:
+            self._result = {"type": self._type,
+                            "ingredients": [],
+                            "result": {}}
             self.create_shapeless_json()
 
     def __str__(self):
-        return str(self._result)
+        return self._result
 
     def get_json(self):
         return self._result
@@ -35,10 +42,8 @@ class Json:
         return self._name
 
     def create_shaped_json(self):
-        self._result["type"] = self._recipe.get_type()
         self._result["pattern"] = self._recipe.get_pattern()
 
-        self._result["key"] = {}
         item_input = self._recipe.get_item_input()
         if item_input is not None:
             for key, value in item_input.items():
@@ -52,13 +57,10 @@ class Json:
                 self._result["key"][key]["block"] = value
 
         output = self._recipe.get_output()
-        self._result["result"] = {}
         self._result["result"][output[0]] = output[1]
+        self._result["result"]["count"] = self._recipe.get_count()
 
     def create_shapeless_json(self):
-        self._result["type"] = self._recipe.get_type()
-
-        self._result["ingredients"] = []
         item_input = self._recipe.get_item_input()
         if item_input is not None:
             for value in item_input:
@@ -70,7 +72,6 @@ class Json:
                 self._result["ingredients"].append({"item": value})
 
         output = self._recipe.get_output()
-        self._result["result"] = {}
         self._result["result"][output[0]] = output[1]
 
 

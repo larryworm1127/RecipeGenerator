@@ -74,8 +74,7 @@ class Json:
         output = self._recipe.get_output()
         self._result["result"][output[0]] = output[1]
 
-
-def generator(recipe_json):
-    path = join(RECIPE_PATH, recipe_json.get_name() + '.json')
-    with open(path, 'w') as outfile:
-        dump(recipe_json.get_json(), outfile)
+    def generator(self):
+        path = join(RECIPE_PATH, self._name + '.json')
+        with open(path, 'w') as outfile:
+            dump(self.get_json(), outfile)

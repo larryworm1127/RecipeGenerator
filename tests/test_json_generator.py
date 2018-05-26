@@ -1,3 +1,10 @@
+"""
+Test module for json_generator.py module
+
+Created on May 24, 2018
+@author: Larry Shi
+"""
+
 # general imports
 import unittest
 from os.path import exists, join
@@ -8,6 +15,7 @@ from recipe_generator.json_generator import RECIPE_PATH
 from recipe_generator.recipe import ShapedRecipe
 from recipe_generator.json_generator import Json
 
+# path constant
 JSON_RESULT_PATH = join(path[0], 'tests', 'json_results')
 
 
@@ -28,13 +36,13 @@ class TestJson(unittest.TestCase):
         self.json_shaped_item = Json(self.shaped_item)
         self.json_shaped_block = Json(self.shaped_block)
 
-    def test_str(self):
-        with open(self.shaped_item_path) as shaped_item_only_file:
-            expected = load(shaped_item_only_file)
+    def test_json(self):
+        with open(self.shaped_item_path) as shaped_item_file:
+            expected = load(shaped_item_file)
             self.assertDictEqual(self.json_shaped_item.get_json(), expected, "JSON doesn't match.")
 
-        with open(self.shaped_block_path) as shaped_block_only_file:
-            expected = load(shaped_block_only_file)
+        with open(self.shaped_block_path) as shaped_block_file:
+            expected = load(shaped_block_file)
             self.assertDictEqual(self.json_shaped_block.get_json(), expected, "JSON doesn't match.")
 
     def test_generator(self):

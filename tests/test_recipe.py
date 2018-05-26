@@ -1,5 +1,5 @@
 """
-Testing module for other modules and classes
+Test module for recipe.py modules
 
 May 16, 2018
 Larry Shi

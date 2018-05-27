@@ -1,13 +1,13 @@
 """
-This module will be generate a JSON file for recipe created by the user
+Python module that generates a JSON file for recipe created by the user
 
-May 15, 2018
-By Larry Shi
+Created on May 15, 2018
+@author: Larry Shi
 """
 
 # general imports
 from json import dump
-from os.path import join, expanduser
+from os.path import join, expanduser, exists
 
 # constants
 RECIPE_PATH = expanduser('~')
@@ -57,7 +57,7 @@ class Json:
                 self._result["key"][key]["block"] = value
 
         output = self._recipe.get_output()
-        self._result["result"][output[0]] = output[1]
+        self._result["result"]["item"] = output
         self._result["result"]["count"] = self._recipe.get_count()
 
     def create_shapeless_json(self):
@@ -72,9 +72,11 @@ class Json:
                 self._result["ingredients"].append({"item": value})
 
         output = self._recipe.get_output()
-        self._result["result"][output[0]] = output[1]
+        self._result["result"]["item"] = output
 
-    def generator(self):
-        path = join(RECIPE_PATH, self._name + '.json')
+    def generator(self, base_path):
+        path = join(base_path, self._name + '.json')
         with open(path, 'w') as outfile:
             dump(self.get_json(), outfile)
+
+        return True if exists(path) else False

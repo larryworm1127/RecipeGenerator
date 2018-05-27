@@ -1,5 +1,20 @@
-import tkinter as tk
+"""
+Python module containing all class for Tkinter GUI
 
+Created on May 24, 2018
+@author: Larry Shi
+"""
+
+# general imports
+import tkinter as tk
+from tkinter import filedialog, messagebox
+
+from recipe_generator.json_generator import Json
+from recipe_generator.recipe import ShapedRecipe, ShapelessRecipe
+
+# constants
+LABEL_FONT = ("Courier", 14)
+DEF_FONT = ("Courier", 12)
 TYPES = {1: "Shaped",
          2: "Shapeless",
          3: "Smelting"}
@@ -9,111 +24,157 @@ class TypeSelector:
 
     def __init__(self, master):
         self._master = master
-        master.title("Minecraft Recipe Generator")
-        master.geometry("300x100")
+        self._dir_path = ''
 
-        # Widgets
+        master.title("Minecraft Recipe Generator")
+        master.geometry("300x140")
+
+        # WIDGETS
         # labels
-        self._type_label = tk.Label(master, text="Type")
+        self._type_label = tk.Label(master, text="Type", font=LABEL_FONT)
 
         # radio buttons
-        self._radio_input = tk.IntVar()
-        self._radio_one = tk.Radiobutton(master, text="Shaped", variable=self._radio_input, value=1)
-        self._radio_two = tk.Radiobutton(master, text="Shapeless", variable=self._radio_input, value=2)
+        self._choice = tk.IntVar()
+        self._radio_one = tk.Radiobutton(master, text="Shaped", variable=self._choice, value=1, font=DEF_FONT)
+        self._radio_two = tk.Radiobutton(master, text="Shapeless", variable=self._choice, value=2, font=DEF_FONT)
 
-        # button
-        self._next_button = tk.Button(master, text="Next", command=self.next_step)
+        # entries
+        self._file_path_entry = tk.Entry(master)
 
-        # Layout
-        self._type_label.grid(row=0, column=0, sticky=tk.W)
-        self._radio_one.grid(row=1, column=0, sticky=tk.W)
-        self._radio_two.grid(row=2, column=0, sticky=tk.W)
-        self._next_button.grid(row=0, column=1, sticky=tk.E)
+        # buttons
+        self._next_button = tk.Button(master, text="Next", command=self.next_step, font=DEF_FONT)
+        self._browse_button = tk.Button(master, text="Browse", command=self.browse_csv, font=DEF_FONT)
+
+        # LAYOUT
+        master.grid_columnconfigure(0, minsize=10)
+        master.grid_columnconfigure(2, minsize=20)
+        master.grid_rowconfigure(4, minsize=10)
+
+        self._type_label.grid(row=0, column=1, sticky=tk.W)
+        self._radio_one.grid(row=1, column=1, sticky=tk.W)
+        self._radio_two.grid(row=2, column=1, sticky=tk.W)
+        self._next_button.grid(row=3, column=1, sticky=tk.W)
+        self._browse_button.grid(row=1, column=3)
+        self._file_path_entry.grid(row=0, column=3)
 
     def next_step(self):
-        selected_item = self._radio_input.get()
-        print(selected_item)
+        selected_item = self._choice.get()
 
-        if selected_item != 0:
+        if selected_item == 0:
+            self._master.geometry("340x180")
+            tk.Label(self._master, text="Please select a type.", font=DEF_FONT).grid(row=5, column=1, columnspan=3,
+                                                                                     sticky=tk.W)
+        elif self._dir_path == '':
+            self._master.geometry("340x180")
+            tk.Label(self._master, text="Please choose a file directory", font=DEF_FONT).grid(row=5, column=1,
+                                                                                              columnspan=4, sticky=tk.W)
+        else:
             self._master.destroy()
             new_root = tk.Tk()
-            new_gui = MainPage(new_root, TYPES[self._radio_input.get()])
-        else:
-            tk.Label(self._master, text="Please select a type.").grid(row=4)
+            MainPage(new_root, TYPES[self._choice.get()], self._dir_path)
+
+    def browse_csv(self):
+        self._dir_path = tk.filedialog.askdirectory()
+        self._file_path_entry.insert(0, self._dir_path)
 
 
 class MainPage:
 
-    def __init__(self, master, recipe_type):
+    def __init__(self, master, recipe_type, dir_path):
         self._master = master
-        master.title("Minecraft Recipe Generator")
-        master.geometry("400x270")
-
         self._type = recipe_type
+        self._dir_path = dir_path
 
+        master.title("Minecraft Recipe Generator")
+        master.geometry("580x340")
+
+        # WIDGETS
         # labels
-        self._output_label = tk.Label(master, text="Output:")
-        self._output_count_label = tk.Label(master, text="Count:")
-        self._item_input_label = tk.Label(master, text="Item Input:")
-        self._block_input_label = tk.Label(master, text="Block Input:")
-
-        # conditional labels and entries
-        if self._type == "Shaped":
-            self._pattern_label = tk.Label(master, text="Pattern:")
-            self._pattern_one_entry = tk.Entry(master)
-            self._pattern_two_entry = tk.Entry(master)
-            self._pattern_three_entry = tk.Entry(master)
+        self._output_label = tk.Label(master, text="Output:", font=LABEL_FONT)
+        self._output_count_label = tk.Label(master, text="Count:", font=LABEL_FONT)
+        self._item_input_label = tk.Label(master, text="Item Input:", font=LABEL_FONT)
+        self._block_input_label = tk.Label(master, text="Block Input:", font=LABEL_FONT)
 
         # entries
         self._output_entry = tk.Entry(master)
         self._output_count_entry = tk.Entry(master)
-        self._item_key_entries = [tk.Entry(master, width=3) for _ in range(9)]
-        self._block_key_entries = [tk.Entry(master, width=3) for _ in range(9)]
-        self._item_input_entries = [tk.Entry(master, width=15) for _ in range(9)]
-        self._block_input_entries = [tk.Entry(master, width=15) for _ in range(9)]
+        self._item_input_entries = [tk.Entry(master) for _ in range(9)]
+        self._block_input_entries = [tk.Entry(master) for _ in range(9)]
+
+        # shaped labels and entries
+        if self._type == "Shaped":
+            self._pattern_label = tk.Label(master, text="Pattern:", font=LABEL_FONT)
+            self._pattern_entries = [tk.Entry(master) for _ in range(3)]
+
+            self._item_key_entries = [tk.Entry(master, width=3) for _ in range(9)]
+            self._block_key_entries = [tk.Entry(master, width=3) for _ in range(9)]
+
+            for index in range(9):
+                self._item_input_entries[index].configure(width=15)
+                self._block_input_entries[index].configure(width=15)
 
         # buttons
-        self._preview_button = tk.Button(master, text="Preview", command=self.preview)
-        self._create_button = tk.Button(master, text="Create", command=self.preview)
+        self._preview_button = tk.Button(master, text="Preview", command=self.preview, font=DEF_FONT)
+        self._create_button = tk.Button(master, text="Create", command=self.create, font=DEF_FONT)
 
-        # layout
-        master.grid_columnconfigure(2, minsize=10)
+        # LAYOUT
+        # rows and columns config
+        master.grid_columnconfigure(2, minsize=15)
         master.grid_columnconfigure(5, minsize=5)
         master.grid_rowconfigure(3, minsize=8)
+        master.grid_rowconfigure(13, minsize=8)
+
+        # labels grid
         self._item_input_label.grid(row=4, sticky=tk.W)
         self._block_input_label.grid(row=4, column=3, sticky=tk.W)
 
+        # item inputs and block inputs entries grid
+        for index in range(9):
+            self._item_input_entries[index].grid(row=4 + index, column=1, sticky=tk.W)
+            self._block_input_entries[index].grid(row=4 + index, column=4, sticky=tk.W)
+
+        # conditional item grid
         if self._type == "Shaped":
             self.shaped_layout()
         else:
             self.shapeless_layout()
 
-        for index in range(9):
-            self._item_key_entries[index].grid(row=4 + index, column=1, sticky=tk.W)
-            self._item_input_entries[index].grid(row=4 + index, column=1, sticky=tk.E)
-            self._block_key_entries[index].grid(row=4 + index, column=4, sticky=tk.W)
-            self._block_input_entries[index].grid(row=4 + index, column=4, sticky=tk.E)
-
-        self._preview_button.grid()
+        # buttons grid
+        self._preview_button.grid(row=14, column=0)
+        self._create_button.grid(row=14, column=1, sticky=tk.W)
 
     def shaped_layout(self):
+        # labels grid
         self._output_label.grid(row=0, column=3, sticky=tk.W)
         self._output_count_label.grid(row=1, column=3, sticky=tk.W)
+        self._pattern_label.grid(row=0, column=0, sticky=tk.W)
 
+        # entries grid
         self._output_entry.grid(row=0, column=4, sticky=tk.W)
         self._output_count_entry.grid(row=1, column=4, sticky=tk.W)
 
-        self._pattern_label.grid(row=0, column=0, sticky=tk.W)
-        self._pattern_one_entry.grid(row=0, column=1)
-        self._pattern_two_entry.grid(row=1, column=1)
-        self._pattern_three_entry.grid(row=2, column=1)
+        # pattern entries grid
+        row = 0
+        for entry in self._pattern_entries:
+            entry.grid(row=row, column=1)
+            row += 1
+
+        # item input and block input grid and config
+        for index in range(9):
+            self._item_input_entries[index].grid(sticky=tk.E)
+            self._block_input_entries[index].grid(sticky=tk.E)
+            self._item_key_entries[index].grid(row=4 + index, column=1, sticky=tk.W)
+            self._block_key_entries[index].grid(row=4 + index, column=4, sticky=tk.W)
 
     def shapeless_layout(self):
+        # row and column config
         self._master.grid_columnconfigure(4, pad=30)
 
+        # labels grid
         self._output_label.grid(row=0, column=0, sticky=tk.W)
         self._output_count_label.grid(row=1, column=0, sticky=tk.W)
 
+        # entries grid
         self._output_entry.grid(row=0, column=1)
         self._output_count_entry.grid(row=1, column=1)
 
@@ -121,7 +182,36 @@ class MainPage:
         pass
 
     def create(self):
-        pass
+        recipe_json = self.create_json()
+        complete = recipe_json.generator(self._dir_path)
+
+        if complete:
+            tk.messagebox.showinfo("Success!", "The recipe file has been created.")
+        else:
+            tk.messagebox.showerror("Error!", "The creation of the file has failed. Check for any unfilled blanks.")
+
+    def create_json(self):
+        output = self._output_entry.get()
+        output_count = self._output_count_entry.get()
+        name = output.split(':')[1]
+
+        item_inputs = {}
+        block_inputs = {}
+        for index in range(9):
+            if self._item_key_entries[index].get() != '':
+                item_inputs[self._item_key_entries[index].get()] = self._item_input_entries[index].get()
+            if self._block_key_entries[index].get() != '':
+                block_inputs[self._block_key_entries[index].get()] = self._block_input_entries[index].get()
+
+        if self._type == "Shaped":
+            pattern = [entry.get() for entry in self._pattern_entries]
+            recipe_object = ShapedRecipe(name, output, item_inputs, block_inputs, pattern, output_count)
+            json_object = Json(recipe_object)
+        else:
+            recipe_object = ShapelessRecipe(output.split(':')[1], output, item_inputs, block_inputs, output_count)
+            json_object = Json(recipe_object)
+
+        return json_object
 
 
 class Preview:

@@ -1,9 +1,8 @@
 """
-This module contains two classes for two different
-types of crafting recipes: Shaped and Shapeless
+Python module that contains two classes for Shaped and Shapeless recipes
 
-May 16, 2018
-Larry Shi
+Created on May 16, 2018
+@author: Larry Shi
 """
 
 

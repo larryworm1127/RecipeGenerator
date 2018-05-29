@@ -81,12 +81,23 @@ class TypeSelector:
 class MainPage:
 
     def __init__(self, master, recipe_type, dir_path):
+        # VARIABLES
+        # gui related
         self._master = master
         self._type = recipe_type
-        self._dir_path = dir_path
 
         master.title("Minecraft Recipe Generator")
         master.geometry("580x340")
+
+        # directory path
+        self._dir_path = dir_path
+
+        # user entry
+        self._output = ''
+        self._output_count = 1
+        self._item_input = {}
+        self._block_input = {}
+        self._pattern = []
 
         # WIDGETS
         # labels
@@ -98,6 +109,7 @@ class MainPage:
         # entries
         self._output_entry = tk.Entry(master)
         self._output_count_entry = tk.Entry(master)
+        self._output_count_entry.insert(0, '1')
         self._item_input_entries = [tk.Entry(master) for _ in range(9)]
         self._block_input_entries = [tk.Entry(master) for _ in range(9)]
 
@@ -191,26 +203,37 @@ class MainPage:
             tk.messagebox.showerror("Error!", "The creation of the file has failed. Check for any unfilled blanks.")
 
     def create_json(self):
-        output = self._output_entry.get()
-        output_count = self._output_count_entry.get()
-        name = output.split(':')[1]
+        # retrieve data from entries
+        self._output = self._output_entry.get()
+        self._output_count = self._output_count_entry.get()
+        name = self._output.split(':')[1] if self._output != '' else ''
 
-        item_inputs = {}
-        block_inputs = {}
         for index in range(9):
-            if self._item_key_entries[index].get() != '':
-                item_inputs[self._item_key_entries[index].get()] = self._item_input_entries[index].get()
-            if self._block_key_entries[index].get() != '':
-                block_inputs[self._block_key_entries[index].get()] = self._block_input_entries[index].get()
+            # check if the item input entries are filled or not
+            item_key = self._item_key_entries[index].get()
+            item = self._item_input_entries[index].get()
+            if item_key != '' and item != '':
+                self._item_input[item_key] = item
 
+            # check if the block input entries are filled or not
+            block_key = self._block_key_entries[index].get()
+            block = self._block_input_entries[index].get()
+            if block_key != '' and block != '':
+                self._block_input[block_key] = block
+
+        # create json objects based on its recipe type
         if self._type == "Shaped":
             pattern = [entry.get() for entry in self._pattern_entries]
-            recipe_object = ShapedRecipe(name, output, item_inputs, block_inputs, pattern, output_count)
+            recipe_object = ShapedRecipe(name, self._output, self._item_input, self._block_input, self._pattern,
+                                         self._output_count)
+            json_object = Json(recipe_object)
+        elif self._type == "Shapeless":
+            recipe_object = ShapelessRecipe(name, self._output, self._item_input, self._block_input, self._output_count)
             json_object = Json(recipe_object)
         else:
-            recipe_object = ShapelessRecipe(output.split(':')[1], output, item_inputs, block_inputs, output_count)
-            json_object = Json(recipe_object)
+            json_object = None
 
+        # return json object for other uses
         return json_object
 
 

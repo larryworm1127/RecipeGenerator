@@ -9,11 +9,8 @@ Created on May 24, 2018
 import tkinter as tk
 from tkinter import filedialog, messagebox
 
-from recipe_generator.json_generator import Json
-from recipe_generator.recipe import ShapedRecipe, ShapelessRecipe
-
 # constants
-from recipe_generator.util import create_json_object
+from recipe_generator.util import create_shaped_json_object, create_shapeless_json_object, verify_data, STATE
 
 LABEL_FONT = ("Courier", 14)
 DEF_FONT = ("Courier", 12)
@@ -193,20 +190,44 @@ class MainPage:
         pass
 
     def create(self):
+        # retrieve data from entries
         output = self._output_entry.get()
-        output_count = self._output_count_entry.get()
-        items = [self._item_input_entries[index].get() for index in range(9)]
-        blocks = [self._block_input_entries[index].get() for index in range(9)]
+        output_count = self._output_count_entry.get() if self._output_count_entry.get() != '' else 1
 
+        items, blocks = [], []
+        for item_entry, block_entry in zip(self._item_input_entries, self._block_input_entries):
+            if item_entry.get() != '':
+                items.append(item_entry.get())
+            if block_entry.get() != '':
+                blocks.append(block_entry.get())
+
+        # actions for shaped recipe
         if self._type == "Shaped":
-            item_key = [self._item_key_entries[index].get() for index in range(9)]
-            block_key = [self._block_key_entries[index].get() for index in range(9)]
+            item_key, block_key = [], []
+            for item_entry, block_entry in zip(self._item_key_entries, self._block_key_entries):
+                if item_entry.get() != '':
+                    item_key.append(item_entry.get())
+                if block_entry.get() != '':
+                    block_key.append(block_entry.get())
+
             pattern = [entry.get() for entry in self._pattern_entries]
 
-            recipe_json = create_json_object(self._type, output, output_count, items, blocks, item_key, block_key,
-                                             pattern)
+            verify_state = verify_data(self._type, output, items, blocks, item_key, block_key, pattern)
+            if STATE[verify_state[0]] == "PASS":
+                recipe_json = create_shaped_json_object(output.split(':')[1], output, output_count, items, blocks,
+                                                        item_key, block_key, pattern)
+            else:
+                tk.messagebox.showerror("Error!", verify_state[1])
+                raise Exception()
+
+        # actions for shapeless recipe
         else:
-            recipe_json = create_json_object(self._type, output, output_count, items, blocks)
+            verify_state = verify_data(self._type, output, items, blocks)
+            if STATE[verify_state[0]] == "PASS":
+                recipe_json = create_shapeless_json_object(output, output_count, items, blocks)
+            else:
+                tk.messagebox.showerror("Error!", verify_state[1])
+                raise Exception()
 
         complete = recipe_json.generator(self._dir_path)
 

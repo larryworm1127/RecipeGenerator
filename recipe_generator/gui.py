@@ -13,6 +13,8 @@ from recipe_generator.json_generator import Json
 from recipe_generator.recipe import ShapedRecipe, ShapelessRecipe
 
 # constants
+from recipe_generator.util import create_json_object
+
 LABEL_FONT = ("Courier", 14)
 DEF_FONT = ("Courier", 12)
 TYPES = {1: "Shaped",
@@ -114,16 +116,11 @@ class MainPage:
         self._block_input_entries = [tk.Entry(master) for _ in range(9)]
 
         # shaped labels and entries
-        if self._type == "Shaped":
-            self._pattern_label = tk.Label(master, text="Pattern:", font=LABEL_FONT)
-            self._pattern_entries = [tk.Entry(master) for _ in range(3)]
+        self._pattern_label = tk.Label(master, text="Pattern:", font=LABEL_FONT)
+        self._pattern_entries = [tk.Entry(master) for _ in range(3)]
 
-            self._item_key_entries = [tk.Entry(master, width=3) for _ in range(9)]
-            self._block_key_entries = [tk.Entry(master, width=3) for _ in range(9)]
-
-            for index in range(9):
-                self._item_input_entries[index].configure(width=15)
-                self._block_input_entries[index].configure(width=15)
+        self._item_key_entries = [tk.Entry(master, width=3) for _ in range(9)]
+        self._block_key_entries = [tk.Entry(master, width=3) for _ in range(9)]
 
         # buttons
         self._preview_button = tk.Button(master, text="Preview", command=self.preview, font=DEF_FONT)
@@ -173,6 +170,8 @@ class MainPage:
 
         # item input and block input grid and config
         for index in range(9):
+            self._item_input_entries[index].configure(width=15)
+            self._block_input_entries[index].configure(width=15)
             self._item_input_entries[index].grid(sticky=tk.E)
             self._block_input_entries[index].grid(sticky=tk.E)
             self._item_key_entries[index].grid(row=4 + index, column=1, sticky=tk.W)
@@ -194,47 +193,30 @@ class MainPage:
         pass
 
     def create(self):
-        recipe_json = self.create_json()
+        output = self._output_entry.get()
+        output_count = self._output_count_entry.get()
+        items = [self._item_input_entries[index].get() for index in range(9)]
+        blocks = [self._block_input_entries[index].get() for index in range(9)]
+
+        if self._type == "Shaped":
+            item_key = [self._item_key_entries[index].get() for index in range(9)]
+            block_key = [self._block_key_entries[index].get() for index in range(9)]
+            pattern = [entry.get() for entry in self._pattern_entries]
+
+            recipe_json = create_json_object(self._type, output, output_count, items, blocks, item_key, block_key,
+                                             pattern)
+        else:
+            recipe_json = create_json_object(self._type, output, output_count, items, blocks)
+
         complete = recipe_json.generator(self._dir_path)
 
         if complete:
             tk.messagebox.showinfo("Success!", "The recipe file has been created.")
         else:
-            tk.messagebox.showerror("Error!", "The creation of the file has failed. Check for any unfilled blanks.")
+            tk.messagebox.showerror("Error!", "The creation of the file has failed.")
 
     def create_json(self):
-        # retrieve data from entries
-        self._output = self._output_entry.get()
-        self._output_count = self._output_count_entry.get()
-        name = self._output.split(':')[1] if self._output != '' else ''
-
-        for index in range(9):
-            # check if the item input entries are filled or not
-            item_key = self._item_key_entries[index].get()
-            item = self._item_input_entries[index].get()
-            if item_key != '' and item != '':
-                self._item_input[item_key] = item
-
-            # check if the block input entries are filled or not
-            block_key = self._block_key_entries[index].get()
-            block = self._block_input_entries[index].get()
-            if block_key != '' and block != '':
-                self._block_input[block_key] = block
-
-        # create json objects based on its recipe type
-        if self._type == "Shaped":
-            pattern = [entry.get() for entry in self._pattern_entries]
-            recipe_object = ShapedRecipe(name, self._output, self._item_input, self._block_input, self._pattern,
-                                         self._output_count)
-            json_object = Json(recipe_object)
-        elif self._type == "Shapeless":
-            recipe_object = ShapelessRecipe(name, self._output, self._item_input, self._block_input, self._output_count)
-            json_object = Json(recipe_object)
-        else:
-            json_object = None
-
-        # return json object for other uses
-        return json_object
+        pass
 
 
 class Preview:

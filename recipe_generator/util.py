@@ -4,6 +4,8 @@ Python module that contains utility functions
 Created on May 28, 2018
 @author: Larry Shi
 """
+from recipe_generator.json_generator import Json
+from recipe_generator.recipe import ShapedRecipe, ShapelessRecipe
 
 
 def verify_data(recipe_type, output, item_input, block_input, pattern=None):
@@ -48,3 +50,21 @@ def verify_data(recipe_type, output, item_input, block_input, pattern=None):
 
         # default is true
         return True
+
+
+def create_json_object(recipe_type, output, output_count, items, blocks, item_key=None, block_key=None, pattern=None):
+    # retrieve data from entries
+    name = output.split(':')[1] if output != '' else ''
+
+    if recipe_type == "Shaped":
+
+        recipe_object = ShapedRecipe(name, output, items, blocks, pattern, output_count)
+        json_object = Json(recipe_object)
+    elif recipe_type == "Shapeless":
+        recipe_object = ShapelessRecipe(name, output, items, blocks, output_count)
+        json_object = Json(recipe_object)
+    else:
+        json_object = None
+
+    # return json object for other uses
+    return json_object

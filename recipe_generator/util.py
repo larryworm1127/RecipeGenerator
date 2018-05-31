@@ -77,6 +77,10 @@ def create_shaped_json_object(name, output, output_count, items, blocks, item_ke
     return json_object
 
 
-def create_shapeless_json_object(output, output_count, items, blocks):
-    # TODO move shapeless json object creation here
-    pass
+def create_shapeless_json_object(name, output, output_count, items, blocks):
+    # create json object
+    recipe_object = ShapelessRecipe(name, output, items, blocks, output_count)
+    json_object = Json(recipe_object)
+
+    # return json object for other uses
+    return json_object

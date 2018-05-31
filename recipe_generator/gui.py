@@ -224,7 +224,7 @@ class MainPage:
         else:
             verify_state = verify_data(self._type, output, items, blocks)
             if STATE[verify_state[0]] == "PASS":
-                recipe_json = create_shapeless_json_object(output, output_count, items, blocks)
+                recipe_json = create_shapeless_json_object(output.split(':')[1], output, output_count, items, blocks)
             else:
                 tk.messagebox.showerror("Error!", verify_state[1])
                 raise Exception()

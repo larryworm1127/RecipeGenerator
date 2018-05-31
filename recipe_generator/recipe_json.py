@@ -1,7 +1,7 @@
 """
 Python module that generates a JSON file for recipe created by the user
 
-Created on May 15, 2018
+@date: 5/14/2018
 @author: Larry Shi
 """
 
@@ -13,35 +13,44 @@ from os.path import join, expanduser, exists
 RECIPE_PATH = expanduser('~')
 
 
+# json class
 class Json:
+    """Class for recipe json object"""
 
     def __init__(self, recipe):
+        # initialize variables
         self._recipe = recipe
         self._name = self._recipe.get_name()
         self._type = self._recipe.get_type()
 
+        # actions for shaped recipe
         if self._type == "crafting_shaped":
-            self._result = {"type": self._type,
-                            "pattern": [],
-                            "key": {},
-                            "result": {}}
+            self._result = {"type": self._type, "pattern": [], "key": {}, "result": {}}
             self.create_shaped_json()
+
+        # actions for shapeless recipe
         else:
-            self._result = {"type": self._type,
-                            "ingredients": [],
-                            "result": {}}
+            self._result = {"type": self._type, "ingredients": [], "result": {}}
             self.create_shapeless_json()
 
     def __str__(self):
-        return self._result
+        result = ""
+        for key, item in self._result.items():
+            result += str(key) + ': ' + item + '\n'
+
+        return result
 
     def get_json(self):
+        """Get method for json resultant"""
         return self._result
 
     def get_name(self):
+        """Get method for name of the recipe"""
         return self._name
 
     def create_shaped_json(self):
+        """Method that creates a shaped recipe json using given recipe class"""
+
         self._result["pattern"] = self._recipe.get_pattern()
 
         item_input = self._recipe.get_item_input()
@@ -61,6 +70,8 @@ class Json:
         self._result["result"]["count"] = self._recipe.get_count()
 
     def create_shapeless_json(self):
+        """Method that creates a shapeless recipe json using given recipe class"""
+
         item_input = self._recipe.get_item_input()
         if item_input is not None:
             for value in item_input:
@@ -75,6 +86,14 @@ class Json:
         self._result["result"]["item"] = output
 
     def generator(self, base_path):
+        """
+        Method that creates the json file with given dir path
+        and the created resultant json
+
+        :param base_path: the path of the directory
+        :return: boolean of whether the file creation was successful
+        """
+
         path = join(base_path, self._name + '.json')
         with open(path, 'w') as outfile:
             dump(self.get_json(), outfile)

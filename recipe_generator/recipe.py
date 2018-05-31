@@ -1,11 +1,12 @@
 """
 Python module that contains two classes for Shaped and Shapeless recipes
 
-Created on May 16, 2018
+@date: 5/16/2018
 @author: Larry Shi
 """
 
 
+# recipe classes
 class ShapelessRecipe:
 
     def __init__(self, name, output, item_input, block_input, count=1):

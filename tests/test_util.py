@@ -1,14 +1,14 @@
 """
 Test module for util.py module
 
-Created on May 28, 2018
+@date: 5/28/2018
 @author: Larry Shi
 """
 
 # general import
 import unittest
 
-from recipe_generator.util import verify_data, STATE
+from recipe_generator import verify_data, STATE
 
 
 class TestUtil(unittest.TestCase):

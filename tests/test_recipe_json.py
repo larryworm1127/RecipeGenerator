@@ -1,7 +1,7 @@
 """
 Test module for json_generator.py module
 
-Created on May 24, 2018
+@date: 5/24/2018
 @author: Larry Shi
 """
 
@@ -11,8 +11,7 @@ from os.path import exists, join
 from sys import path
 from json import load
 
-from recipe_generator.recipe import ShapedRecipe
-from recipe_generator.json_generator import Json
+from recipe_generator import ShapedRecipe, Json
 
 # path constant
 JSON_GENERATOR_PATH = join(path[0], 'tests', 'json_generator_folder')

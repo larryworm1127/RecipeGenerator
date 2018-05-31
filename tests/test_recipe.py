@@ -1,7 +1,7 @@
 """
 Test module for recipe.py modules
 
-Created on May 16, 2018
+@date: 5/16/2018
 @author: Larry Shi
 """
 

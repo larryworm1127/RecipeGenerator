@@ -1,17 +1,16 @@
 """
 Python module containing all class for Tkinter GUI
 
-Created on May 24, 2018
+@date: 5/25/2018
 @author: Larry Shi
 """
 
 # general imports
 import tkinter as tk
 from tkinter import filedialog, messagebox
+from recipe_generator import create_shaped_json_object, create_shapeless_json_object, verify_data, STATE
 
 # constants
-from recipe_generator.util import create_shaped_json_object, create_shapeless_json_object, verify_data, STATE
-
 LABEL_FONT = ("Courier", 14)
 DEF_FONT = ("Courier", 12)
 TYPES = {1: "Shaped",
@@ -20,6 +19,7 @@ TYPES = {1: "Shaped",
 
 
 class TypeSelector:
+    """Class for Type Selecting Page"""
 
     def __init__(self, master):
         self._master = master
@@ -57,6 +57,8 @@ class TypeSelector:
         self._file_path_entry.grid(row=0, column=3)
 
     def next_step(self):
+        """Event handler for Next button"""
+
         selected_item = self._choice.get()
 
         if selected_item == 0:
@@ -73,11 +75,14 @@ class TypeSelector:
             MainPage(new_root, TYPES[self._choice.get()], self._dir_path)
 
     def browse_csv(self):
+        """ Event handler for Browse button"""
+
         self._dir_path = tk.filedialog.askdirectory()
         self._file_path_entry.insert(0, self._dir_path)
 
 
 class MainPage:
+    """Class for Main Page"""
 
     def __init__(self, master, recipe_type, dir_path):
         # VARIABLES
@@ -150,6 +155,8 @@ class MainPage:
         self._create_button.grid(row=14, column=1, sticky=tk.W)
 
     def shaped_layout(self):
+        """Helper function for setting up GUI for shaped recipe"""
+
         # labels grid
         self._output_label.grid(row=0, column=3, sticky=tk.W)
         self._output_count_label.grid(row=1, column=3, sticky=tk.W)
@@ -175,6 +182,8 @@ class MainPage:
             self._block_key_entries[index].grid(row=4 + index, column=4, sticky=tk.W)
 
     def shapeless_layout(self):
+        """Helper function for setting up GUI for shapeless recipe"""
+
         # row and column config
         self._master.grid_columnconfigure(4, pad=30)
 
@@ -187,9 +196,12 @@ class MainPage:
         self._output_count_entry.grid(row=1, column=1)
 
     def preview(self):
+        """Event handler for Preview button"""
         pass
 
     def create(self):
+        """Event handler for Create button"""
+
         # retrieve data from entries
         output = self._output_entry.get()
         output_count = self._output_count_entry.get() if self._output_count_entry.get() != '' else 1
@@ -236,11 +248,9 @@ class MainPage:
         else:
             tk.messagebox.showerror("Error!", "The creation of the file has failed.")
 
-    def create_json(self):
-        pass
-
 
 class Preview:
+    """Class for Preview Page"""
 
     def __init__(self, master):
         self._master = master

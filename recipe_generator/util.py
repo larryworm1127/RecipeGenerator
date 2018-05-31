@@ -1,13 +1,12 @@
 """
 Python module that contains utility functions
 
-Created on May 28, 2018
+@date: 5/28/2018
 @author: Larry Shi
 """
 
 # general imports
-from recipe_generator.json_generator import Json
-from recipe_generator.recipe import ShapedRecipe, ShapelessRecipe
+from recipe_generator import Json, ShapedRecipe, ShapelessRecipe
 
 # constants
 STATE = {0: "PASS",
@@ -17,6 +16,19 @@ STATE = {0: "PASS",
 
 # util functions
 def verify_data(recipe_type, output, items, blocks, item_keys=None, block_keys=None, pattern=None):
+    """
+    A util function that checks whether the user entered
+    all required data and whether the data is valid or not
+
+    :param recipe_type: the type of recipe
+    :param output: the output of the recipe
+    :param items: the item inputs of recipe
+    :param blocks: the block inputs of recipe
+    :param item_keys: the item keys used in pattern
+    :param block_keys: the block keys used in pattern
+    :param pattern: the pattern of shaped recipe
+    :return: a integer for state and an state message
+    """
     # check output
     if output == '':
         return 2, "Output is empty."
@@ -66,6 +78,19 @@ def verify_data(recipe_type, output, items, blocks, item_keys=None, block_keys=N
 
 
 def create_shaped_json_object(name, output, output_count, items, blocks, item_key, block_key, pattern):
+    """
+    A util function for creating a json object for a shaped recipe
+
+    :param name: the name of the recipe
+    :param output: the output of the recipe
+    :param output_count: the amount of output
+    :param items: the item inputs of the recipe
+    :param blocks: the block inputs of the recipe
+    :param item_key: the item keys used in pattern
+    :param block_key: the block keys used in pattern
+    :param pattern: the pattern for shaped recipe
+    :return: json object for shaped recipe
+    """
     item_input = {key: item for key, item in zip(item_key, items)}
     block_input = {key: block for key, block in zip(block_key, blocks)}
 
@@ -78,6 +103,16 @@ def create_shaped_json_object(name, output, output_count, items, blocks, item_ke
 
 
 def create_shapeless_json_object(name, output, output_count, items, blocks):
+    """
+    A util function for creating a json object for a shapeless recipe
+
+    :param name: the name of the recipe
+    :param output: the output of the recipe
+    :param output_count: the amount of output
+    :param items: the item inputs of the recipe
+    :param blocks: the block inputs of the recipe
+    :return: json object for shapeless recipe
+    """
     # create json object
     recipe_object = ShapelessRecipe(name, output, items, blocks, output_count)
     json_object = Json(recipe_object)

@@ -13,14 +13,10 @@ from recipes import ShapedRecipe, ShapelessRecipe
 
 class TestShapedRecipe(unittest.TestCase):
     def setUp(self):
-        self.shaped_item = ShapedRecipe("item_test", "mod:item_test",
-                                        {'A': "mod:item_test"},
-                                        None,
-                                        [" A ", " A ", " A "])
+        self.shaped_item = ShapedRecipe("item_test", "mod:item_test", {'A': "mod:item_test"},
+                                        None, [" A ", " A ", " A "])
         self.shaped_block = ShapedRecipe("item_test", "mod:item_test",
-                                         None,
-                                         {'A': "mod:block_test"},
-                                         [" A ", " A ", " A "])
+                                         None, {'A': "mod:block_test"}, [" A ", " A ", " A "])
 
     def test_init(self):
         self.assertEqual(self.shaped_item.get_name(), "item_test", "Name doesn't match.")
@@ -42,12 +38,8 @@ class TestShapedRecipe(unittest.TestCase):
 
 class TestShapelessRecipe(unittest.TestCase):
     def setUp(self):
-        self.shapeless_item = ShapelessRecipe("item_test", "mod:item_test",
-                                              ["mod:item", "mod:item"],
-                                              None)
-        self.shapeless_block = ShapelessRecipe("item_test", "mod:item_test",
-                                               None,
-                                               ["mod:block", "mod:block"])
+        self.shapeless_item = ShapelessRecipe("item_test", "mod:item_test", ["mod:item", "mod:item"], None)
+        self.shapeless_block = ShapelessRecipe("item_test", "mod:item_test", None, ["mod:block", "mod:block"])
 
     def test_init(self):
         self.assertEqual(self.shapeless_item.get_name(), "item_test", "Name doesn't match.")

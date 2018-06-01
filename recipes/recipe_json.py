@@ -25,12 +25,12 @@ class Json:
 
         # actions for shaped recipe
         if self._type == "crafting_shaped":
-            self._result = {"type": self._type, "pattern": [], "key": {}, "result": {}}
+            self._result = {"type": "minecraft:" + self._type, "pattern": [], "key": {}, "result": {}}
             self.create_shaped_json()
 
         # actions for shapeless recipe
         else:
-            self._result = {"type": self._type, "ingredients": [], "result": {}}
+            self._result = {"type": "minecraft:" + self._type, "ingredients": [], "result": {}}
             self.create_shapeless_json()
 
     def __str__(self):
@@ -51,39 +51,47 @@ class Json:
     def create_shaped_json(self):
         """Method that creates a shaped recipe json using given recipe class"""
 
+        # pattern
         self._result["pattern"] = self._recipe.get_pattern()
 
+        # item ingredients
         item_input = self._recipe.get_item_input()
         if item_input is not None:
             for key, value in item_input.items():
                 self._result["key"][key] = {}
                 self._result["key"][key]["item"] = value
 
+        # block ingredients
         block_input = self._recipe.get_block_input()
         if block_input is not None:
             for key, value in block_input.items():
                 self._result["key"][key] = {}
                 self._result["key"][key]["block"] = value
 
+        # recipe output
         output = self._recipe.get_output()
         self._result["result"]["item"] = output
-        self._result["result"]["count"] = self._recipe.get_count()
+        self._result["result"]["count"] = int(self._recipe.get_count())
 
     def create_shapeless_json(self):
         """Method that creates a shapeless recipe json using given recipe class"""
 
+        # item ingredients
         item_input = self._recipe.get_item_input()
         if item_input is not None:
             for value in item_input:
                 self._result["ingredients"].append({"item": value})
 
+        # block ingredients
         block_input = self._recipe.get_block_input()
         if block_input is not None:
             for value in block_input:
-                self._result["ingredients"].append({"item": value})
+                self._result["ingredients"].append({"block": value})
 
+        # recipe output
         output = self._recipe.get_output()
         self._result["result"]["item"] = output
+        self._result["result"]["count"] = self._recipe.get_count()
 
     def generator(self, base_path):
         """

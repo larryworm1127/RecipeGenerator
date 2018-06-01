@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mod:item_test"
+    },
+    {
+      "block": "mod:block_test"
+    }
+  ],
+  "result": {
+    "item": "mod:item_test",
+    "count": 1
+  }
+}

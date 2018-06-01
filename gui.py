@@ -252,6 +252,7 @@ class MainPage:
                 tk.messagebox.showerror("Error!", verify_state[1])
                 raise Exception()
 
+        # create the json file
         complete = recipe_json.generator(self._dir_path)
 
         if complete:

@@ -7,6 +7,7 @@ Python module containing all class for Tkinter GUI
 
 # general imports
 import tkinter as tk
+from os.path import expanduser
 from tkinter import filedialog, messagebox
 from recipes import create_shaped_json_object, create_shapeless_json_object, verify_data, STATE
 
@@ -21,9 +22,9 @@ TYPES = {1: "Shaped",
 class TypeSelector:
     """Class for Type Selecting Page"""
 
-    def __init__(self, master):
+    def __init__(self, master, directory):
         self._master = master
-        self._dir_path = ''
+        self._dir_path = directory
 
         master.title("Minecraft Recipe Generator")
         master.geometry("300x140")
@@ -39,6 +40,7 @@ class TypeSelector:
 
         # entries
         self._file_path_entry = tk.Entry(master)
+        self._file_path_entry.insert(0, self._dir_path)
 
         # buttons
         self._next_button = tk.Button(master, text="Next", command=self.next_step, font=DEF_FONT)
@@ -62,13 +64,9 @@ class TypeSelector:
         selected_item = self._choice.get()
 
         if selected_item == 0:
-            self._master.geometry("340x180")
-            tk.Label(self._master, text="Please select a type.", font=DEF_FONT).grid(row=5, column=1, columnspan=3,
-                                                                                     sticky=tk.W)
+            tk.messagebox.showerror("Error!", "Please select a recipe type.")
         elif self._dir_path == '':
-            self._master.geometry("340x180")
-            tk.Label(self._master, text="Please choose a file directory", font=DEF_FONT).grid(row=5, column=1,
-                                                                                              columnspan=4, sticky=tk.W)
+            tk.messagebox.showerror("Error!", "Please choose a file directory.", font=DEF_FONT)
         else:
             self._master.destroy()
             new_root = tk.Tk()
@@ -78,6 +76,7 @@ class TypeSelector:
         """ Event handler for Browse button"""
 
         self._dir_path = tk.filedialog.askdirectory()
+        self._file_path_entry.delete(0, 'end')
         self._file_path_entry.insert(0, self._dir_path)
 
 
@@ -127,13 +126,14 @@ class MainPage:
         # buttons
         self._preview_button = tk.Button(master, text="Preview", command=self.preview, font=DEF_FONT)
         self._create_button = tk.Button(master, text="Create", command=self.create, font=DEF_FONT)
+        self._back_button = tk.Button(master, text="Back", command=self.back, font=DEF_FONT)
 
         # LAYOUT
         # rows and columns config
         master.grid_columnconfigure(2, minsize=15)
         master.grid_columnconfigure(5, minsize=5)
         master.grid_rowconfigure(3, minsize=8)
-        master.grid_rowconfigure(13, minsize=8)
+        master.grid_rowconfigure(13, minsize=15)
 
         # labels grid
         self._item_input_label.grid(row=4, sticky=tk.W)
@@ -151,8 +151,9 @@ class MainPage:
             self.shapeless_layout()
 
         # buttons grid
-        self._preview_button.grid(row=14, column=0)
-        self._create_button.grid(row=14, column=1, sticky=tk.W)
+        self._preview_button.grid(row=14, column=1, sticky=tk.W)
+        self._create_button.grid(row=14, column=3, sticky=tk.W)
+        self._back_button.grid(row=14, column=0)
 
     def shaped_layout(self):
         """Helper function for setting up GUI for shaped recipe"""
@@ -198,6 +199,16 @@ class MainPage:
     def preview(self):
         """Event handler for Preview button"""
         pass
+
+    def back(self):
+        """Event handler for Back button"""
+        choice = tk.messagebox.askokcancel("Warning!", "All the data typed in will be lost if you choose to go back!")
+
+        if choice:
+            self._master.destroy()
+
+            new_root = tk.Tk()
+            TypeSelector(new_root, self._dir_path)
 
     def create(self):
         """Event handler for Create button"""
@@ -259,5 +270,6 @@ class Preview:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    gui = TypeSelector(root)
+    path = expanduser('~')
+    gui = TypeSelector(root, path)
     root.mainloop()

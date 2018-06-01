@@ -6,7 +6,8 @@ Python module that contains utility functions
 """
 
 # general imports
-from . import Json, ShapedRecipe, ShapelessRecipe
+from .recipe_json import Json
+from .recipe import ShapedRecipe, ShapelessRecipe
 
 # constants
 STATE = {0: "PASS",

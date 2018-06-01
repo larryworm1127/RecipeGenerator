@@ -1,3 +1,5 @@
+"""This package contains module for recipe creation"""
+
 __author__ = "Larry Shi"
 
 from .util import verify_data, STATE, create_shaped_json_object, create_shapeless_json_object

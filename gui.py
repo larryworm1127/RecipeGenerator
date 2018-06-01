@@ -8,7 +8,7 @@ Python module containing all class for Tkinter GUI
 # general imports
 import tkinter as tk
 from tkinter import filedialog, messagebox
-from recipe_generator import create_shaped_json_object, create_shapeless_json_object, verify_data, STATE
+from recipes import create_shaped_json_object, create_shapeless_json_object, verify_data, STATE
 
 # constants
 LABEL_FONT = ("Courier", 14)

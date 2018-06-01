@@ -8,7 +8,7 @@ Test module for recipe.py modules
 # general imports
 import unittest
 
-from recipe_generator.recipe import ShapedRecipe, ShapelessRecipe
+from recipes import ShapedRecipe, ShapelessRecipe
 
 
 class TestShapedRecipe(unittest.TestCase):

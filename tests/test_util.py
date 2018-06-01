@@ -8,7 +8,7 @@ Test module for util.py module
 # general import
 import unittest
 
-from recipe_generator import verify_data, STATE
+from recipes import verify_data, STATE
 
 
 class TestUtil(unittest.TestCase):

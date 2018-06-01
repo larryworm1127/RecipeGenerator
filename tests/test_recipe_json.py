@@ -11,7 +11,7 @@ from os.path import exists, join
 from sys import path
 from json import load
 
-from recipe_generator import ShapedRecipe, Json
+from recipes import ShapedRecipe, Json
 
 # path constant
 JSON_GENERATOR_PATH = join(path[0], 'tests', 'json_generator_folder')

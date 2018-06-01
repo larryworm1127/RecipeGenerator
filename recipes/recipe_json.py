@@ -91,7 +91,7 @@ class Json:
         # recipe output
         output = self._recipe.get_output()
         self._result["result"]["item"] = output
-        self._result["result"]["count"] = self._recipe.get_count()
+        self._result["result"]["count"] = int(self._recipe.get_count())
 
     def generator(self, base_path):
         """

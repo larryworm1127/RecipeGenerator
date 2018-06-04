@@ -47,6 +47,7 @@ def verify_data(recipe_type, output, items, blocks, item_keys=None, block_keys=N
             return 2, "Pattern is empty."
         else:
             keys = set([key for row in pattern for key in row])
+            keys.discard(' ')
 
         # check item input
         for item_key in item_keys:

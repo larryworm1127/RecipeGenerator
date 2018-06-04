@@ -28,6 +28,12 @@ class TestUtil(unittest.TestCase):
                                       ["item", "item", "item", "item", "item"], ["block", "block", "block", "block"],
                                       ['A', 'B', 'C', 'D', 'E'], ['F', 'G', 'H', 'I'], ["ABC", "DEF", "GHI"])
 
+        self.true_case9 = verify_data("Shaped", 'mod:item', ["item_one", "item_two"], [], ['A', 'B'], [],
+                                      [" A ", " A ", " B "])
+
+        self.true_case10 = verify_data("Shaped", 'mod:item', ["item_one", "item_two"], [], ['A', 'B'], [],
+                                       ["A  ", "A  ", "B  "])
+
         # pattern
         self.true_case4 = verify_data("Shaped", 'mod:item', ["item"], [], ['A'], [], ["AA", "AA", ""])
         self.true_case5 = verify_data("Shaped", 'mod:item', ["item"], [], ['A'], [], ["A", "", ""])
@@ -74,6 +80,8 @@ class TestUtil(unittest.TestCase):
         self.assertEqual("PASS", STATE[self.true_case6[0]], self.true_case6[1])
         self.assertEqual("PASS", STATE[self.true_case7[0]], self.true_case7[1])
         self.assertEqual("PASS", STATE[self.true_case8[0]], self.true_case8[1])
+        self.assertEqual("PASS", STATE[self.true_case9[0]], self.true_case9[1])
+        self.assertEqual("PASS", STATE[self.true_case10[0]], self.true_case10[1])
 
         # FALSE CASES
         # state

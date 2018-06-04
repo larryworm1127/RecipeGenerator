@@ -95,13 +95,6 @@ class MainPage:
         # directory path
         self._dir_path = dir_path
 
-        # user entry
-        self._output = ''
-        self._output_count = 1
-        self._item_input = {}
-        self._block_input = {}
-        self._pattern = []
-
         # WIDGETS
         # labels
         self._output_label = tk.Label(master, text="Output:", font=LABEL_FONT)
@@ -118,7 +111,7 @@ class MainPage:
 
         # shaped labels and entries
         self._pattern_label = tk.Label(master, text="Pattern:", font=LABEL_FONT)
-        self._pattern_entries = [tk.Entry(master) for _ in range(3)]
+        self._pattern_entries = [[tk.Entry(master, width=4) for _ in range(3)] for _ in range(3)]
 
         self._item_key_entries = [tk.Entry(master, width=3) for _ in range(9)]
         self._block_key_entries = [tk.Entry(master, width=3) for _ in range(9)]
@@ -168,10 +161,14 @@ class MainPage:
         self._output_count_entry.grid(row=1, column=4, sticky=tk.W)
 
         # pattern entries grid
-        row = 0
-        for entry in self._pattern_entries:
-            entry.grid(row=row, column=1)
-            row += 1
+        for row in range(3):
+            for column in range(3):
+                if column == 0:
+                    self._pattern_entries[row][column].grid(row=row, column=1, sticky=tk.W)
+                elif column == 1:
+                    self._pattern_entries[row][column].grid(row=row, column=1)
+                else:
+                    self._pattern_entries[row][column].grid(row=row, column=1, sticky=tk.E)
 
         # item input and block input grid and config
         for index in range(9):
@@ -233,7 +230,18 @@ class MainPage:
                 if block_entry.get() != '':
                     block_key.append(block_entry.get())
 
-            pattern = [entry.get() for entry in self._pattern_entries]
+            pattern = []
+            for row in range(3):
+                string_row = ""
+                for column in range(3):
+                    entry_input = self._pattern_entries[row][column].get()
+                    if entry_input == '':
+                        string_row += ' '
+                    else:
+                        string_row += entry_input
+                pattern.append(string_row)
+
+            print(pattern)
 
             verify_state = verify_data(self._type, output, items, blocks, item_key, block_key, pattern)
             if STATE[verify_state[0]] == "PASS":

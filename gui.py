@@ -120,6 +120,7 @@ class MainPage:
         self._preview_button = tk.Button(master, text="Preview", command=self.preview, font=DEF_FONT)
         self._create_button = tk.Button(master, text="Create", command=self.create, font=DEF_FONT)
         self._back_button = tk.Button(master, text="Back", command=self.back, font=DEF_FONT)
+        self._reset_button = tk.Button(master, text="Reset", command=self.reset, font=DEF_FONT)
 
         # LAYOUT
         # rows and columns config
@@ -147,6 +148,7 @@ class MainPage:
         self._preview_button.grid(row=14, column=1, sticky=tk.W)
         self._create_button.grid(row=14, column=3, sticky=tk.W)
         self._back_button.grid(row=14, column=0)
+        self._reset_button.grid(row=14, column=4, sticky=tk.W)
 
     def shaped_layout(self):
         """Helper function for setting up GUI for shaped recipe"""
@@ -209,6 +211,16 @@ class MainPage:
 
             new_root = tk.Tk()
             TypeSelector(new_root, self._dir_path)
+
+    def reset(self):
+        """Event handler for Reset Button"""
+        choice = tk.messagebox.askokcancel("Warning!", "All the data typed in will be lost if you choose to reset!")
+
+        if choice:
+            self._master.destroy()
+
+            new_root = tk.Tk()
+            MainPage(new_root, self._type, self._dir_path)
 
     def create(self):
         """Event handler for Create button"""

@@ -111,7 +111,7 @@ class MainPage:
 
         # shaped labels and entries
         self._pattern_label = tk.Label(master, text="Pattern:", font=LABEL_FONT)
-        self._pattern_entries = [[tk.Entry(master, width=4) for _ in range(3)] for _ in range(3)]
+        self._pattern_entries = [[tk.Entry(master, width=5) for _ in range(3)] for _ in range(3)]
 
         self._item_key_entries = [tk.Entry(master, width=3) for _ in range(9)]
         self._block_key_entries = [tk.Entry(master, width=3) for _ in range(9)]
@@ -150,6 +150,9 @@ class MainPage:
 
     def shaped_layout(self):
         """Helper function for setting up GUI for shaped recipe"""
+
+        # row and column config
+        self._master.grid_columnconfigure(1, pad=30)
 
         # labels grid
         self._output_label.grid(row=0, column=3, sticky=tk.W)
@@ -240,8 +243,6 @@ class MainPage:
                     else:
                         string_row += entry_input
                 pattern.append(string_row)
-
-            print(pattern)
 
             verify_state = verify_data(self._type, output, items, blocks, item_key, block_key, pattern)
             if STATE[verify_state[0]] == "PASS":

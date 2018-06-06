@@ -18,6 +18,9 @@ TYPES = {1: "Shaped",
          2: "Shapeless",
          3: "Smelting"}
 
+# global variables
+preview_open = False
+
 
 class TypeSelector:
     """Class for Type Selecting Page"""
@@ -98,7 +101,6 @@ class MainPage:
 
         # other variables
         self._dir_path = dir_path
-        self._preview_open = False
         self._preview_class = None
 
         # WIDGETS
@@ -207,14 +209,15 @@ class MainPage:
     def preview(self):
         """Event handler for Preview button"""
 
+        global preview_open
         json_object = self.collect_and_verify_data()
 
-        if self._preview_open:
+        if preview_open:
             self._preview_class.master.destroy()
 
         new_root = tk.Tk()
         self._preview_class = Preview(new_root, json_object)
-        self._preview_open = True
+        preview_open = True
 
     def back(self):
         """Event handler for Back button"""
@@ -311,11 +314,14 @@ class MainPage:
         return recipe_json
 
     def confirm_close(self):
-        if tk.messagebox.askokcancel("Quit", "Do you really wish to quit?"):
-            self._master.destroy()
+        """Event handler for Exiting the GUI"""
 
-            if self._preview_open:
-                self._preview_class.master.destroy()
+        self._master.destroy()
+
+        if preview_open:
+            self._preview_class.master.destroy()
+
+        exit()
 
 
 class Preview:
@@ -326,18 +332,25 @@ class Preview:
         # gui related
         self.master = master
         master.title("Preview")
-
-        master.geometry("400x400")
+        master.geometry("580x370")
+        master.protocol("WM_DELETE_WINDOW", self.confirm_close)
 
         # other variable
         self._json_object = json_object
 
         # WIDGETS
-        self._text = tk.Text(master, height=5, width=50, font=DEF_FONT)
+        self._text = tk.Text(master, height=5, width=100, font=DEF_FONT)
         self._text.insert(tk.END, str(json_object))
 
         # LAYOUT
         self._text.pack(side=tk.LEFT, fill=tk.Y)
+
+    def confirm_close(self):
+        """Event handler for Exiting the GUI"""
+
+        global preview_open
+        self.master.destroy()
+        preview_open = False
 
 
 if __name__ == "__main__":

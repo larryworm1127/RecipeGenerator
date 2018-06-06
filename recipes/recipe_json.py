@@ -38,6 +38,7 @@ class Json:
         result = "{ \n"
 
         # format strings
+        count = 1
         for key, item in self._result.items():
             # one item case - item is string
             if type(item) == str:
@@ -48,32 +49,80 @@ class Json:
                 result += "  " + str(key) + ': { \n'
 
                 # loop through the first inner dict
+                count_inner = 1
                 for item_key, value in item.items():
 
                     # inner dict item is not dict
                     if type(value) != dict:
-                        result += "    " + str(item_key) + ': ' + str(value) + ', \n'
+
+                        # determine whether to add comma at the end or not
+                        if count_inner == len(item):
+                            result += "    " + str(item_key) + ': ' + str(value) + '\n'
+                        else:
+                            result += "    " + str(item_key) + ': ' + str(value) + ', \n'
 
                     # inner dict item is dict
                     else:
-                        result += "    " + str(item_key) + ': {\n'
+                        result += "    " + str(item_key) + ': { \n'
+                        count_inner_two = 1
                         for item_key_two, value_two in value.items():
-                            result += "      " + str(item_key_two) + ': ' + str(value_two) + ', \n'
-                        result += "    }, \n"
 
-                result += "  }, \n"
+                            # determine whether to add comma at the end or not
+                            if count_inner_two == len(value):
+                                result += "      " + str(item_key_two) + ': ' + str(value_two) + '\n'
+                            else:
+                                result += "      " + str(item_key_two) + ': ' + str(value_two) + ', \n'
+
+                            count_inner_two += 1
+
+                        # determine whether to add comma at the end or not
+                        if count_inner == len(item):
+                            result += "    } \n"
+                        else:
+                            result += "    }, \n"
+
+                    count_inner += 1
+
+                # determine whether to add comma at the end or not
+                if count == len(self._result):
+                    result += "  } \n"
+                else:
+                    result += "  }, \n"
 
             # multiple item case - item is list
             else:
                 result += "  " + str(key) + ': [ \n'
+
+                count_inner = 1
                 for value in item:
 
                     # add string quotes around is value is string
                     if type(value) == str:
-                        result += "    " + '"' + str(value) + '"' + ", \n"
+
+                        # determine whether to add comma at the end or not
+                        if count_inner == len(item):
+                            result += "    " + '"' + str(value) + '" \n'
+                        else:
+                            result += "    " + '"' + str(value) + '"' + ", \n"
+
+                    # don't add quotes around is value isn't a string
                     else:
-                        result += "    " + str(value) + ", \n"
-                result += "  ], \n"
+
+                        # determine whether to add comma at the end or not
+                        if count_inner == len(item):
+                            result += "    " + str(value) + "\n"
+                        else:
+                            result += "    " + str(value) + ", \n"
+
+                    count_inner += 1
+
+                # determine whether to add comma at the end or not
+                if count == len(self._result):
+                    result += "  ] \n"
+                else:
+                    result += "  ], \n"
+
+            count += 1
 
         result += "}"
 

@@ -23,6 +23,7 @@ class TypeSelector:
     """Class for Type Selecting Page"""
 
     def __init__(self, master, directory):
+        # VARIABLES
         self._master = master
         self._dir_path = directory
 
@@ -47,10 +48,12 @@ class TypeSelector:
         self._browse_button = tk.Button(master, text="Browse", command=self.browse_csv, font=DEF_FONT)
 
         # LAYOUT
+        # row and column config
         master.grid_columnconfigure(0, minsize=10)
         master.grid_columnconfigure(2, minsize=20)
         master.grid_rowconfigure(4, minsize=10)
 
+        # widget grid
         self._type_label.grid(row=0, column=1, sticky=tk.W)
         self._radio_one.grid(row=1, column=1, sticky=tk.W)
         self._radio_two.grid(row=2, column=1, sticky=tk.W)
@@ -91,9 +94,12 @@ class MainPage:
 
         master.title("Minecraft Recipe Generator")
         master.geometry("580x340")
+        master.protocol("WM_DELETE_WINDOW", self.confirm_close)
 
-        # directory path
+        # other variables
         self._dir_path = dir_path
+        self._preview_open = False
+        self._preview_class = None
 
         # WIDGETS
         # labels
@@ -200,7 +206,15 @@ class MainPage:
 
     def preview(self):
         """Event handler for Preview button"""
-        pass
+
+        json_object = self.collect_and_verify_data()
+
+        if self._preview_open:
+            self._preview_class.master.destroy()
+
+        new_root = tk.Tk()
+        self._preview_class = Preview(new_root, json_object)
+        self._preview_open = True
 
     def back(self):
         """Event handler for Back button"""
@@ -225,53 +239,7 @@ class MainPage:
     def create(self):
         """Event handler for Create button"""
 
-        # retrieve data from entries
-        output = self._output_entry.get()
-        output_count = self._output_count_entry.get() if self._output_count_entry.get() != '' else 1
-
-        items, blocks = [], []
-        for item_entry, block_entry in zip(self._item_input_entries, self._block_input_entries):
-            if item_entry.get() != '':
-                items.append(item_entry.get())
-            if block_entry.get() != '':
-                blocks.append(block_entry.get())
-
-        # actions for shaped recipe
-        if self._type == "Shaped":
-            item_key, block_key = [], []
-            for item_entry, block_entry in zip(self._item_key_entries, self._block_key_entries):
-                if item_entry.get() != '':
-                    item_key.append(item_entry.get())
-                if block_entry.get() != '':
-                    block_key.append(block_entry.get())
-
-            pattern = []
-            for row in range(3):
-                string_row = ""
-                for column in range(3):
-                    entry_input = self._pattern_entries[row][column].get()
-                    if entry_input == '':
-                        string_row += ' '
-                    else:
-                        string_row += entry_input
-                pattern.append(string_row)
-
-            verify_state = verify_data(self._type, output, items, blocks, item_key, block_key, pattern)
-            if STATE[verify_state[0]] == "PASS":
-                recipe_json = create_shaped_json_object(output.split(':')[1], output, output_count, items, blocks,
-                                                        item_key, block_key, pattern)
-            else:
-                tk.messagebox.showerror("Error!", verify_state[1])
-                raise Exception()
-
-        # actions for shapeless recipe
-        else:
-            verify_state = verify_data(self._type, output, items, blocks)
-            if STATE[verify_state[0]] == "PASS":
-                recipe_json = create_shapeless_json_object(output.split(':')[1], output, output_count, items, blocks)
-            else:
-                tk.messagebox.showerror("Error!", verify_state[1])
-                raise Exception()
+        recipe_json = self.collect_and_verify_data()
 
         # create the json file
         complete = recipe_json.generator(self._dir_path)
@@ -281,13 +249,95 @@ class MainPage:
         else:
             tk.messagebox.showerror("Error!", "The creation of the file has failed.")
 
+    def collect_and_verify_data(self):
+        """Helper function that collect the data from entries and return the data to the caller"""
+
+        # Retrieve Data from Entries
+        # outputs
+        output = self._output_entry.get()
+        output_count = self._output_count_entry.get() if self._output_count_entry.get() != '' else 1
+
+        # items and blocks
+        items, blocks = [], []
+        for item_entry, block_entry in zip(self._item_input_entries, self._block_input_entries):
+            if item_entry.get() != '':
+                items.append(item_entry.get())
+            if block_entry.get() != '':
+                blocks.append(block_entry.get())
+
+        # Actions for Shaped Recipe
+        if self._type == "Shaped":
+
+            # item keys and block keys
+            item_keys, block_keys = [], []
+            for item_entry, block_entry in zip(self._item_key_entries, self._block_key_entries):
+                if item_entry.get() != '':
+                    item_keys.append(item_entry.get())
+                if block_entry.get() != '':
+                    block_keys.append(block_entry.get())
+
+            # pattern
+            pattern = []
+            for row in range(3):
+                string_row = ""
+                for column in range(3):
+                    entry_input = self._pattern_entries[row][column].get()
+                    if entry_input == '':
+                        string_row += ' '
+                    else:
+                        string_row += entry_input
+
+                pattern.append(string_row)
+
+            # verify the data
+            verify_state = verify_data(self._type, output, items, blocks, item_keys, block_keys, pattern)
+            if STATE[verify_state[0]] == "PASS":
+                recipe_json = create_shaped_json_object(output.split(':')[1], output, output_count, items, blocks,
+                                                        item_keys, block_keys, pattern)
+            else:
+                tk.messagebox.showerror("Error!", verify_state[1])
+                raise Exception()
+
+        # Actions for Shapeless Recipe
+        else:
+            # verify the data
+            verify_state = verify_data(self._type, output, items, blocks)
+            if STATE[verify_state[0]] == "PASS":
+                recipe_json = create_shapeless_json_object(output.split(':')[1], output, output_count, items, blocks)
+            else:
+                tk.messagebox.showerror("Error!", verify_state[1])
+                raise Exception()
+
+        return recipe_json
+
+    def confirm_close(self):
+        if tk.messagebox.askokcancel("Quit", "Do you really wish to quit?"):
+            self._master.destroy()
+
+            if self._preview_open:
+                self._preview_class.master.destroy()
+
 
 class Preview:
     """Class for Preview Page"""
 
-    def __init__(self, master):
-        self._master = master
+    def __init__(self, master, json_object):
+        # VARIABLES
+        # gui related
+        self.master = master
         master.title("Preview")
+
+        master.geometry("400x400")
+
+        # other variable
+        self._json_object = json_object
+
+        # WIDGETS
+        self._text = tk.Text(master, height=5, width=50, font=DEF_FONT)
+        self._text.insert(tk.END, str(json_object))
+
+        # LAYOUT
+        self._text.pack(side=tk.LEFT, fill=tk.Y)
 
 
 if __name__ == "__main__":

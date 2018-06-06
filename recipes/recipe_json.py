@@ -34,9 +34,48 @@ class Json:
             self.create_shapeless_json()
 
     def __str__(self):
-        result = ""
+        # variables
+        result = "{ \n"
+
+        # format strings
         for key, item in self._result.items():
-            result += str(key) + ': ' + item + '\n'
+            # one item case - item is string
+            if type(item) == str:
+                result += "  " + str(key) + ': ' + str(item) + '\n'
+
+            # multiple item case - item is dict
+            elif type(item) == dict:
+                result += "  " + str(key) + ': { \n'
+
+                # loop through the first inner dict
+                for item_key, value in item.items():
+
+                    # inner dict item is not dict
+                    if type(value) != dict:
+                        result += "    " + str(item_key) + ': ' + str(value) + ', \n'
+
+                    # inner dict item is dict
+                    else:
+                        result += "    " + str(item_key) + ': {\n'
+                        for item_key_two, value_two in value.items():
+                            result += "      " + str(item_key_two) + ': ' + str(value_two) + ', \n'
+                        result += "    }, \n"
+
+                result += "  }, \n"
+
+            # multiple item case - item is list
+            else:
+                result += "  " + str(key) + ': [ \n'
+                for value in item:
+
+                    # add string quotes around is value is string
+                    if type(value) == str:
+                        result += "    " + '"' + str(value) + '"' + ", \n"
+                    else:
+                        result += "    " + str(value) + ", \n"
+                result += "  ], \n"
+
+        result += "}"
 
         return result
 

@@ -42,11 +42,11 @@ class Json:
         for key, item in self._result.items():
             # one item case - item is string
             if type(item) == str:
-                result += "  " + str(key) + ': ' + str(item) + '\n'
+                result += "  " + repr(key) + ': ' + repr(item) + '\n'
 
             # multiple item case - item is dict
             elif type(item) == dict:
-                result += "  " + str(key) + ': { \n'
+                result += "  " + repr(key) + ': { \n'
 
                 # loop through the first inner dict
                 count_inner = 1
@@ -57,21 +57,21 @@ class Json:
 
                         # determine whether to add comma at the end or not
                         if count_inner == len(item):
-                            result += "    " + str(item_key) + ': ' + str(value) + '\n'
+                            result += "    " + repr(item_key) + ': ' + repr(value) + '\n'
                         else:
-                            result += "    " + str(item_key) + ': ' + str(value) + ', \n'
+                            result += "    " + repr(item_key) + ': ' + repr(value) + ', \n'
 
                     # inner dict item is dict
                     else:
-                        result += "    " + str(item_key) + ': { \n'
+                        result += "    " + repr(item_key) + ': { \n'
                         count_inner_two = 1
                         for item_key_two, value_two in value.items():
 
                             # determine whether to add comma at the end or not
                             if count_inner_two == len(value):
-                                result += "      " + str(item_key_two) + ': ' + str(value_two) + '\n'
+                                result += "      " + repr(item_key_two) + ': ' + repr(value_two) + '\n'
                             else:
-                                result += "      " + str(item_key_two) + ': ' + str(value_two) + ', \n'
+                                result += "      " + repr(item_key_two) + ': ' + repr(value_two) + ', \n'
 
                             count_inner_two += 1
 
@@ -82,7 +82,7 @@ class Json:
                             result += "    }, \n"
 
                     count_inner += 1
-
+                    
                 # determine whether to add comma at the end or not
                 if count == len(self._result):
                     result += "  } \n"
@@ -91,7 +91,7 @@ class Json:
 
             # multiple item case - item is list
             else:
-                result += "  " + str(key) + ': [ \n'
+                result += "  " + repr(key) + ': [ \n'
 
                 count_inner = 1
                 for value in item:
@@ -101,18 +101,18 @@ class Json:
 
                         # determine whether to add comma at the end or not
                         if count_inner == len(item):
-                            result += "    " + '"' + str(value) + '" \n'
+                            result += "    " + repr(value) + '\n'
                         else:
-                            result += "    " + '"' + str(value) + '"' + ", \n"
+                            result += "    " + repr(value) + ", \n"
 
                     # don't add quotes around is value isn't a string
                     else:
 
                         # determine whether to add comma at the end or not
                         if count_inner == len(item):
-                            result += "    " + str(value) + "\n"
+                            result += "    " + repr(value) + "\n"
                         else:
-                            result += "    " + str(value) + ", \n"
+                            result += "    " + repr(value) + ", \n"
 
                     count_inner += 1
 

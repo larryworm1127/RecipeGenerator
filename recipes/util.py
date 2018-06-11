@@ -6,6 +6,13 @@ Python module that contains utility functions
 """
 
 # general imports
+import logging
+from os.path import join, exists
+import sys
+from os import mkdir
+
+import time
+
 from .recipe_json import Json
 from .recipe import ShapedRecipe, ShapelessRecipe
 
@@ -79,7 +86,7 @@ def verify_data(recipe_type, output, items, blocks, item_keys=None, block_keys=N
         return 0, "Pass"
 
 
-def create_shaped_json_object(name, output, output_count, items, blocks, item_key, block_key, pattern):
+def create_shaped_json(name, output, output_count, items, blocks, item_key, block_key, pattern):
     """
     A util function for creating a json object for a shaped recipe
 
@@ -104,7 +111,7 @@ def create_shaped_json_object(name, output, output_count, items, blocks, item_ke
     return json_object
 
 
-def create_shapeless_json_object(name, output, output_count, items, blocks):
+def create_shapeless_json(name, output, output_count, items, blocks):
     """
     A util function for creating a json object for a shapeless recipe
 
@@ -121,3 +128,44 @@ def create_shapeless_json_object(name, output, output_count, items, blocks):
 
     # return json object for other uses
     return json_object
+
+
+def get_logger(name, log_file):
+    """
+    A util function that creates a logging object and return it to the caller
+
+    :param log_file: the name of the log file
+    :param name: the name of the logger
+    :return: a logger object
+    """
+
+    # create log file folder
+    log_path = join(sys.path[0], 'logs')
+    if not exists(log_path):
+        mkdir(log_path)
+
+    # create logger
+    logger = logging.getLogger(name)
+    logger.setLevel(logging.DEBUG)
+
+    # create file handler and set level to debug
+    file_handler = logging.FileHandler(join("logs", log_file + ".log"))
+    file_handler.setLevel(logging.DEBUG)
+
+    # create console handler and set level to debug
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+
+    # create formatter
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    # set formatter
+    ch.setFormatter(formatter)
+    file_handler.setFormatter(formatter)
+
+    # add handlers to logger
+    logger.addHandler(ch)
+    logger.addHandler(file_handler)
+
+    # return logger object
+    return logger

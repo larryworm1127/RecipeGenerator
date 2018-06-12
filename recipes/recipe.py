@@ -18,7 +18,7 @@ class ShapelessRecipe:
         self.type = "crafting_shapeless"
 
     def __str__(self):
-        return "Name: %s\nOutput: %s\nItem Input: %s\nBlock Input: %s\nOutput Count: %s\nType: %s\n" % (
+        return "Name: {}\nOutput: {}\nItem Input: {}\nBlock Input: {}\nOutput Count: {}\nType: {}\n".format(
             self.name, self.output, self.item_input, self.block_input, self.output_count, self.type)
 
     def get_name(self):
@@ -52,8 +52,8 @@ class ShapedRecipe:
         self.type = "crafting_shaped"
 
     def __str__(self):
-        return "Name: %s\nOutput: %s\nItem Input: %s\nBlock Input: %s\nOutput Count: %s\nPattern: %s\nType: %s\n" % (
-            self.name, self.output, self.item_input, self.block_input, self.output_count, self.pattern, self.type)
+        return "Name: {}\nOutput: {}\nItem Input: {}\nBlock Input: {}\nOutput Count: {}\nPattern: {}\nType: {}\n".format \
+            (self.name, self.output, self.item_input, self.block_input, self.output_count, self.pattern, self.type)
 
     def get_name(self):
         return self.name

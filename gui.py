@@ -13,7 +13,6 @@ from tkinter import filedialog, messagebox
 from recipes import create_shaped_json, create_shapeless_json, verify_data, STATE, get_logger
 
 # constants
-LOG_FILE_NAME = "gui"
 LABEL_FONT = ("Courier", 14)
 DEF_FONT = ("Courier", 12)
 TYPES = {1: "Shaped",
@@ -25,14 +24,14 @@ preview_open = False
 
 
 # classes
-class TypeSelectPage:
+class IntroPage:
     """Class for Type Selecting Page"""
 
     def __init__(self, master, directory):
         # VARIABLES
         self._master = master
         self._dir_path = directory
-        self._logger = get_logger("Type Select Page", LOG_FILE_NAME)
+        self._logger = get_logger('root.IntroPage')
 
         master.title("Minecraft Recipe Generator")
         master.geometry("300x140")
@@ -122,7 +121,7 @@ class MainPage:
         # other variables
         self._dir_path = dir_path
         self._preview_class = None
-        self._logger = get_logger("Main Page", LOG_FILE_NAME)
+        self._logger = get_logger('root.MainPage')
 
         # WIDGETS
         self._logger.info("Initialize widgets")
@@ -265,7 +264,7 @@ class MainPage:
             self._master.destroy()
 
             new_root = tk.Tk()
-            TypeSelectPage(new_root, self._dir_path)
+            IntroPage(new_root, self._dir_path)
 
     def reset(self):
         """Event handler for Reset Button"""
@@ -362,7 +361,6 @@ class MainPage:
     def confirm_close(self):
         """Event handler for Exiting the GUI"""
 
-        self._logger.info("Exit program")
         self._master.destroy()
 
         # close preview window if it is open
@@ -385,13 +383,15 @@ class PreviewPage:
 
         # other variable
         self._json_object = json_object
-        self._logger = get_logger("Preview Page", LOG_FILE_NAME)
+        self._logger = get_logger('root.PreviewPage')
 
         # WIDGETS
+        self._logger.info("Initialize widgets")
         self._text = tk.Text(master, height=5, width=100, font=DEF_FONT)
         self._text.insert(tk.END, str(json_object))
 
         # LAYOUT
+        self._logger.info("Initialize GUI layout")
         self._text.pack(side=tk.LEFT, fill=tk.Y)
 
     def confirm_close(self):
@@ -399,7 +399,6 @@ class PreviewPage:
 
         global preview_open
 
-        self._logger.info("Exit Preview page")
         self.master.destroy()
         preview_open = False
 
@@ -407,5 +406,5 @@ class PreviewPage:
 if __name__ == "__main__":
     root = tk.Tk()
     path = expanduser('~')
-    gui = TypeSelectPage(root, path)
+    gui = IntroPage(root, path)
     root.mainloop()

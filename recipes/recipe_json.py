@@ -22,6 +22,7 @@ class Json:
         self._recipe = recipe
         self._name = self._recipe.get_name()
         self._type = self._recipe.get_type()
+       # self._logger = get_logger("Json Object")
 
         # actions for shaped recipe
         if self._type == "crafting_shaped":
@@ -41,11 +42,11 @@ class Json:
         count = 1
         for key, item in self._result.items():
             # one item case - item is string
-            if type(item) == str:
-                result += "  " + repr(key) + ': ' + repr(item) + '\n'
+            if isinstance(item, str):
+                result += "  {}: {} \n".format(repr(key), repr(item))
 
             # multiple item case - item is dict
-            elif type(item) == dict:
+            elif isinstance(item, dict):
                 result += "  " + repr(key) + ': { \n'
 
                 # loop through the first inner dict
@@ -53,25 +54,16 @@ class Json:
                 for item_key, value in item.items():
 
                     # inner dict item is not dict
-                    if type(value) != dict:
-
-                        # determine whether to add comma at the end or not
-                        if count_inner == len(item):
-                            result += "    " + repr(item_key) + ': ' + repr(value) + '\n'
-                        else:
-                            result += "    " + repr(item_key) + ': ' + repr(value) + ', \n'
-
-                    # inner dict item is dict
-                    else:
+                    if isinstance(value, dict):
                         result += "    " + repr(item_key) + ': { \n'
                         count_inner_two = 1
                         for item_key_two, value_two in value.items():
 
                             # determine whether to add comma at the end or not
                             if count_inner_two == len(value):
-                                result += "      " + repr(item_key_two) + ': ' + repr(value_two) + '\n'
+                                result += "      {}: {} \n".format(repr(item_key_two), repr(value_two))
                             else:
-                                result += "      " + repr(item_key_two) + ': ' + repr(value_two) + ', \n'
+                                result += "      {}: {}, \n".format(repr(item_key_two), repr(value_two))
 
                             count_inner_two += 1
 
@@ -81,8 +73,17 @@ class Json:
                         else:
                             result += "    }, \n"
 
+                    # inner dict item is dict
+                    else:
+
+                        # determine whether to add comma at the end or not
+                        if count_inner == len(item):
+                            result += "    {}: {} \n".format(repr(item_key), repr(value))
+                        else:
+                            result += "    {}: {}, \n".format(repr(item_key), repr(value))
+
                     count_inner += 1
-                    
+
                 # determine whether to add comma at the end or not
                 if count == len(self._result):
                     result += "  } \n"
@@ -91,28 +92,16 @@ class Json:
 
             # multiple item case - item is list
             else:
-                result += "  " + repr(key) + ': [ \n'
+                result += "  {}: [ \n".format(repr(key))
 
                 count_inner = 1
                 for value in item:
 
-                    # add string quotes around is value is string
-                    if type(value) == str:
-
-                        # determine whether to add comma at the end or not
-                        if count_inner == len(item):
-                            result += "    " + repr(value) + '\n'
-                        else:
-                            result += "    " + repr(value) + ", \n"
-
-                    # don't add quotes around is value isn't a string
+                    # determine whether to add comma at the end or not
+                    if count_inner == len(item):
+                        result += "    {} \n".format(repr(value))
                     else:
-
-                        # determine whether to add comma at the end or not
-                        if count_inner == len(item):
-                            result += "    " + repr(value) + "\n"
-                        else:
-                            result += "    " + repr(value) + ", \n"
+                        result += "    {}, \n".format(repr(value))
 
                     count_inner += 1
 

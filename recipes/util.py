@@ -7,11 +7,12 @@ Python module that contains utility functions
 
 # general imports
 import logging
+from logging.handlers import TimedRotatingFileHandler
 from os.path import join, exists
 import sys
 from os import mkdir
 
-import time
+from datetime import datetime
 
 from .recipe_json import Json
 from .recipe import ShapedRecipe, ShapelessRecipe
@@ -130,11 +131,10 @@ def create_shapeless_json(name, output, output_count, items, blocks):
     return json_object
 
 
-def get_logger(name, log_file):
+def get_logger(name):
     """
     A util function that creates a logging object and return it to the caller
 
-    :param log_file: the name of the log file
     :param name: the name of the logger
     :return: a logger object
     """
@@ -149,7 +149,7 @@ def get_logger(name, log_file):
     logger.setLevel(logging.DEBUG)
 
     # create file handler and set level to debug
-    file_handler = logging.FileHandler(join("logs", log_file + ".log"))
+    file_handler = TimedRotatingFileHandler(join("logs", "latest_logs.log"), when='m', interval=1)
     file_handler.setLevel(logging.DEBUG)
 
     # create console handler and set level to debug
@@ -157,11 +157,13 @@ def get_logger(name, log_file):
     ch.setLevel(logging.DEBUG)
 
     # create formatter
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    file_formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+    file_formatter.datefmt = '%m-%d %H:%M'
+    console_formatter = logging.Formatter('%(name)-16s: %(levelname)-7s - %(message)s')
 
     # set formatter
-    ch.setFormatter(formatter)
-    file_handler.setFormatter(formatter)
+    ch.setFormatter(console_formatter)
+    file_handler.setFormatter(file_formatter)
 
     # add handlers to logger
     logger.addHandler(ch)

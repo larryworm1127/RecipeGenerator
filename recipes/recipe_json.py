@@ -9,6 +9,8 @@ Python module that generates a JSON file for recipe created by the user
 from json import dump
 from os.path import join, expanduser, exists
 
+from recipes import util
+
 # constants
 RECIPE_PATH = expanduser('~')
 
@@ -20,9 +22,9 @@ class Json:
     def __init__(self, recipe):
         # initialize variables
         self._recipe = recipe
-        self._name = self._recipe.get_name()
-        self._type = self._recipe.get_type()
-       # self._logger = get_logger("Json Object")
+        self._name = recipe.name
+        self._type = recipe.type
+        self._logger = util.get_logger("recipe_json.Json", recipe.debug)
 
         # actions for shaped recipe
         if self._type == "crafting_shaped":
@@ -35,6 +37,8 @@ class Json:
             self.create_shapeless_json()
 
     def __str__(self):
+        self._logger.info("Create string representation of JSON recipe")
+
         # variables
         result = "{ \n"
 
@@ -119,56 +123,62 @@ class Json:
 
     def get_json(self):
         """Get method for json resultant"""
+
         return self._result
 
     def get_name(self):
         """Get method for name of the recipe"""
+
         return self._name
 
     def create_shaped_json(self):
         """Method that creates a shaped recipe json using given recipe class"""
 
+        self._logger.info("Create shaped JSON recipe")
+
         # pattern
-        self._result["pattern"] = self._recipe.get_pattern()
+        self._result["pattern"] = self._recipe.pattern
 
         # item ingredients
-        item_input = self._recipe.get_item_input()
+        item_input = self._recipe.item_input
         if item_input is not None:
             for key, value in item_input.items():
                 self._result["key"][key] = {}
                 self._result["key"][key]["item"] = value
 
         # block ingredients
-        block_input = self._recipe.get_block_input()
+        block_input = self._recipe.block_input
         if block_input is not None:
             for key, value in block_input.items():
                 self._result["key"][key] = {}
                 self._result["key"][key]["block"] = value
 
         # recipe output
-        output = self._recipe.get_output()
+        output = self._recipe.output
         self._result["result"]["item"] = output
-        self._result["result"]["count"] = int(self._recipe.get_count())
+        self._result["result"]["count"] = int(self._recipe.output_count)
 
     def create_shapeless_json(self):
         """Method that creates a shapeless recipe json using given recipe class"""
 
+        self._logger.info("Create shapeless JSON recipe")
+
         # item ingredients
-        item_input = self._recipe.get_item_input()
+        item_input = self._recipe.item_input
         if item_input is not None:
             for value in item_input:
                 self._result["ingredients"].append({"item": value})
 
         # block ingredients
-        block_input = self._recipe.get_block_input()
+        block_input = self._recipe.block_input
         if block_input is not None:
             for value in block_input:
                 self._result["ingredients"].append({"block": value})
 
         # recipe output
-        output = self._recipe.get_output()
+        output = self._recipe.output
         self._result["result"]["item"] = output
-        self._result["result"]["count"] = int(self._recipe.get_count())
+        self._result["result"]["count"] = int(self._recipe.output_count)
 
     def generator(self, base_path):
         """
@@ -179,8 +189,14 @@ class Json:
         :return: boolean of whether the file creation was successful
         """
 
+        self._logger.info("Create JSON recipe file at given file location")
+
         path = join(base_path, self._name + '.json')
         with open(path, 'w') as outfile:
             dump(self.get_json(), outfile)
 
-        return True if exists(path) else False
+        if exists(path):
+            return True
+        else:
+            self._logger.error("File creation failed")
+            return False

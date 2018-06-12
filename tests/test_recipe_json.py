@@ -22,13 +22,13 @@ class TestJson(unittest.TestCase):
     def setUp(self):
         # Shaped Recipes
         self.shaped_item = ShapedRecipe("shaped1", "mod:item_test", {'A': "mod:item_test"}, None,
-                                        [" A ", " A ", " A "])
+                                        [" A ", " A ", " A "], debug=True)
         self.shaped_block = ShapedRecipe("shaped2", "mod:item_test", None, {'A': "mod:block_test"},
-                                         [" A ", " A ", " A "])
+                                         [" A ", " A ", " A "], debug=True)
         self.shaped_item_block = ShapedRecipe("shaped3", "mod:item_test", {'A': "mod:item_test"},
-                                              {'B': "mod:block_test"}, [" A ", " B ", " A "])
+                                              {'B': "mod:block_test"}, [" A ", " B ", " A "], debug=True)
         self.shaped_count_two = ShapedRecipe("shaped4", "mod:item_test", {'A': "mod:item_test"}, None,
-                                             [" A ", " A ", " A "], 2)
+                                             [" A ", " A ", " A "], 2, debug=True)
 
         self.json_shaped_item = Json(self.shaped_item)
         self.json_shaped_block = Json(self.shaped_block)
@@ -45,10 +45,10 @@ class TestJson(unittest.TestCase):
             self.shaped_count_two_expected = load(shaped_count_two_file)
 
         # Shapeless Recipes
-        self.shapeless_item = ShapelessRecipe("shapeless1", "mod:item_test", ["mod:item_test"], None)
-        self.shapeless_block = ShapelessRecipe("shapeless2", "mod:item_test", None, ["mod:block_test"])
-        self.shapeless_item_block = ShapelessRecipe("shapeless3", "mod:item_test", ["mod:item_test"], ["mod:block_test"])
-        self.shapeless_count_two = ShapelessRecipe("shapeless4", "mod:item_test", None, ["mod:block_test"], 2)
+        self.shapeless_item = ShapelessRecipe("shapeless1", "mod:item_test", ["mod:item_test"], None, debug=True)
+        self.shapeless_block = ShapelessRecipe("shapeless2", "mod:item_test", None, ["mod:block_test"], debug=True)
+        self.shapeless_item_block = ShapelessRecipe("shapeless3", "mod:item_test", ["mod:item_test"], ["mod:block_test"], debug=True)
+        self.shapeless_count_two = ShapelessRecipe("shapeless4", "mod:item_test", None, ["mod:block_test"], 2, debug=True)
 
         self.json_shapeless_item = Json(self.shapeless_item)
         self.json_shapeless_block = Json(self.shapeless_block)
@@ -82,29 +82,29 @@ class TestJson(unittest.TestCase):
     def test_generator(self):
         # Shaped Recipes
         self.json_shaped_item.generator(JSON_GENERATOR_PATH)
-        self.assertTrue(exists(join(JSON_GENERATOR_PATH, self.shaped_item.get_name() + '.json')))
+        self.assertTrue(exists(join(JSON_GENERATOR_PATH, self.shaped_item.name + '.json')))
 
         self.json_shaped_block.generator(JSON_GENERATOR_PATH)
-        self.assertTrue(exists(join(JSON_GENERATOR_PATH, self.shaped_block.get_name() + '.json')))
+        self.assertTrue(exists(join(JSON_GENERATOR_PATH, self.shaped_block.name + '.json')))
 
         self.json_shaped_item_block.generator(JSON_GENERATOR_PATH)
-        self.assertTrue(exists(join(JSON_GENERATOR_PATH, self.shaped_item_block.get_name() + '.json')))
+        self.assertTrue(exists(join(JSON_GENERATOR_PATH, self.shaped_item_block.name + '.json')))
 
         self.json_shaped_count_two.generator(JSON_GENERATOR_PATH)
-        self.assertTrue(exists(join(JSON_GENERATOR_PATH, self.shaped_count_two.get_name() + '.json')))
+        self.assertTrue(exists(join(JSON_GENERATOR_PATH, self.shaped_count_two.name + '.json')))
 
         # Shapeless Recipes
         self.json_shapeless_item.generator(JSON_GENERATOR_PATH)
-        self.assertTrue(exists(join(JSON_GENERATOR_PATH, self.shapeless_item.get_name() + '.json')))
+        self.assertTrue(exists(join(JSON_GENERATOR_PATH, self.shapeless_item.name + '.json')))
 
         self.json_shapeless_block.generator(JSON_GENERATOR_PATH)
-        self.assertTrue(exists(join(JSON_GENERATOR_PATH, self.shapeless_block.get_name() + '.json')))
+        self.assertTrue(exists(join(JSON_GENERATOR_PATH, self.shapeless_block.name + '.json')))
 
         self.json_shapeless_item_block.generator(JSON_GENERATOR_PATH)
-        self.assertTrue(exists(join(JSON_GENERATOR_PATH, self.shapeless_item_block.get_name() + '.json')))
+        self.assertTrue(exists(join(JSON_GENERATOR_PATH, self.shapeless_item_block.name + '.json')))
 
         self.json_shapeless_count_two.generator(JSON_GENERATOR_PATH)
-        self.assertTrue(exists(join(JSON_GENERATOR_PATH, self.shapeless_count_two.get_name() + '.json')))
+        self.assertTrue(exists(join(JSON_GENERATOR_PATH, self.shapeless_count_two.name + '.json')))
 
 
 if __name__ == '__main__':

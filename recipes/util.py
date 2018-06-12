@@ -12,8 +12,6 @@ from os.path import join, exists
 import sys
 from os import mkdir
 
-from datetime import datetime
-
 from .recipe_json import Json
 from .recipe import ShapedRecipe, ShapelessRecipe
 
@@ -21,6 +19,14 @@ from .recipe import ShapedRecipe, ShapelessRecipe
 STATE = {0: "PASS",
          1: "WARNING",
          2: "FAIL"}
+
+LOGGING_LEVEL = {
+    1: "DEBUG",
+    2: "INFO",
+    3: "WARNING",
+    4: "ERROR",
+    5: "CRITICAL"
+}
 
 
 # util functions
@@ -131,43 +137,41 @@ def create_shapeless_json(name, output, output_count, items, blocks):
     return json_object
 
 
-def get_logger(name):
+def get_logger(name, debug=False):
     """
     A util function that creates a logging object and return it to the caller
 
+    :param debug: optional parameter to avoid file path error when running tests
     :param name: the name of the logger
     :return: a logger object
     """
-
-    # create log file folder
-    log_path = join(sys.path[0], 'logs')
-    if not exists(log_path):
-        mkdir(log_path)
 
     # create logger
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
 
-    # create file handler and set level to debug
-    file_handler = TimedRotatingFileHandler(join("logs", "latest_logs.log"), when='m', interval=1)
-    file_handler.setLevel(logging.DEBUG)
+    if not debug:
+        # create log file folder
+        log_path = join(sys.path[0], 'logs')
+        if not exists(log_path):
+            mkdir(log_path)
 
-    # create console handler and set level to debug
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
+        # create formatter
+        file_formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+        file_formatter.datefmt = '%m-%d %H:%M'
+        console_formatter = logging.Formatter('%(name)-16s: %(levelname)-7s - %(message)s')
 
-    # create formatter
-    file_formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
-    file_formatter.datefmt = '%m-%d %H:%M'
-    console_formatter = logging.Formatter('%(name)-16s: %(levelname)-7s - %(message)s')
+        # create file handler and set level to debug
+        file_handler = TimedRotatingFileHandler(join("logs", "latest_logs.log"), when='m', interval=1)
+        file_handler.setLevel(logging.DEBUG)
+        file_handler.setFormatter(file_formatter)
+        logger.addHandler(file_handler)
 
-    # set formatter
-    ch.setFormatter(console_formatter)
-    file_handler.setFormatter(file_formatter)
-
-    # add handlers to logger
-    logger.addHandler(ch)
-    logger.addHandler(file_handler)
+        # create console handler and set level to debug
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(logging.DEBUG)
+        console_handler.setFormatter(console_formatter)
+        logger.addHandler(console_handler)
 
     # return logger object
     return logger

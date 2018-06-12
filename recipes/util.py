@@ -150,6 +150,7 @@ def get_logger(name, debug=False):
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
 
+    # don't create stream handler or file handler if debug is true
     if not debug:
         # create log file folder
         log_path = join(sys.path[0], 'logs')

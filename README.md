@@ -1,5 +1,6 @@
 # Recipe Generator
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/df81ed1cc0f24478bfec594fcb4a7b96)](https://www.codacy.com/app/larryworm1127/RecipeGenerator?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=larryworm1127/RecipeGenerator&amp;utm_campaign=Badge_Grade)
+[![CircleCI](https://circleci.com/gh/larryworm1127/RecipeGenerator.svg?style=svg)](https://circleci.com/gh/larryworm1127/RecipeGenerator)
 
 ## About
 This is a small program designed to easily create custom Minecraft JSON file recipes. \

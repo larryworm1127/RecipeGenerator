@@ -24,15 +24,16 @@ Some future features that the program may contains:
 > or use: \
 > ```Download Zip```
 
-> Once the project is downloaded, go the the project directory \
+> Once the project is downloaded, go the the project directory
 > ```bash
 > ...
 > $ cd RecipeGenerator
 > ```
 
-> While in the project folder, run: \
+> While in the project folder, run:
 > ```bash
 > $ pipenv sync
+> $ pipenv shell
 > ```
 
 Once the installation is complete, run "gui.py" with Python 3.6 and the program is good to go!

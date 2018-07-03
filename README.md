@@ -35,5 +35,6 @@ Some future features that the program may contains:
 > $ pipenv sync
 > $ pipenv shell
 > ```
+> The above commands creates a virtual environment on the machine and activates the machine for running the program
 
 Once the installation is complete, run "gui.py" with Python 3.6 and the program is good to go!

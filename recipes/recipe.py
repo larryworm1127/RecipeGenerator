@@ -5,49 +5,49 @@ Python module that contains two classes for Shaped and Shapeless recipes
 @author: Larry Shi
 """
 
+# general import
+from logging import Logger
+from dataclasses import dataclass, field
+from typing import Union
+
 from recipes import util
 
 
 # recipe classes
+@dataclass
 class ShapelessRecipe:
+    # recipe variables
+    name: str
+    output: str
+    item_input: Union[list, None]
+    block_input: Union[list, None]
+    output_count: int = 1
+    type: str = "crafting_shapeless"
 
-    def __init__(self, name, output, item_input, block_input, count=1, debug=False):
-        # initialize variables
-        self.name = name
-        self.output = output
-        self.output_count = count
-        self.item_input = item_input
-        self.block_input = block_input
-        self.type = "crafting_shapeless"
+    # logging
+    debug: bool = False
+    logger: Logger = field(init=False)
 
-        # logging
-        self.debug = debug
-        self.logger = util.get_logger("recipe.ShapelessRecipe", debug)
+    def __post_init__(self):
+        self.logger = util.get_logger("recipe.ShapelessRecipe", self.debug)
         self.logger.info("Shapeless recipe object created")
 
-    def __str__(self):
-        return "Name: {}\nOutput: {}\nItem Input: {}\nBlock Input: {}\nOutput Count: {}\nType: {}\n".format(
-            self.name, self.output, self.item_input, self.block_input, self.output_count, self.type)
 
-
+@dataclass
 class ShapedRecipe:
+    # recipe variables
+    name: str
+    output: str
+    item_input: Union[list, None]
+    block_input: Union[list, None]
+    pattern: list
+    output_count: int = 1
+    type: str = "crafting_shaped"
 
-    def __init__(self, name, output, item_input, block_input, pattern, count=1, debug=False):
-        # initialize variables
-        self.name = name
-        self.output = output
-        self.item_input = item_input
-        self.block_input = block_input
-        self.output_count = count
-        self.pattern = pattern
-        self.type = "crafting_shaped"
+    # logging
+    debug: bool = False
+    logger: Logger = field(init=False)
 
-        # logging
-        self.debug = debug
-        self.logger = util.get_logger("recipe.ShapedRecipe", debug)
+    def __post_init__(self):
+        self.logger = util.get_logger("recipe.ShapedRecipe", self.debug)
         self.logger.info("Shaped recipe object created")
-
-    def __str__(self):
-        return "Name: {}\nOutput: {}\nItem Input: {}\nBlock Input: {}\nOutput Count: {}\nPattern: " \
-               "{}\nType: {}\n".format(self.name, self.output, self.item_input, self.block_input, self.output_count,
-                                       self.pattern, self.type)

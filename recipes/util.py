@@ -7,13 +7,13 @@ Python module that contains utility functions
 
 # general imports
 import logging
+import sys
+
 from logging.handlers import TimedRotatingFileHandler
 from os.path import join, exists
-import sys
 from os import mkdir
 
-from .recipe_json import Json
-from .recipe import ShapedRecipe, ShapelessRecipe
+from . import Json, ShapedRecipe, ShapelessRecipe
 
 # constants
 STATE = {0: "PASS",
@@ -30,7 +30,8 @@ LOGGING_LEVEL = {
 
 
 # util functions
-def verify_data(recipe_type, output, items, blocks, item_keys=None, block_keys=None, pattern=None):
+def verify_data(recipe_type: str, output: str, items: list, blocks: list, item_keys: list = None,
+                block_keys: list = None, pattern: list = None) -> tuple:
     """
     A util function that checks whether the user entered
     all required data and whether the data is valid or not
@@ -93,7 +94,8 @@ def verify_data(recipe_type, output, items, blocks, item_keys=None, block_keys=N
         return 0, "Pass"
 
 
-def create_shaped_json(name, output, output_count, items, blocks, item_key, block_key, pattern):
+def create_shaped_json(name: str, output: str, output_count: int, items: list, blocks: list, item_key: list,
+                       block_key: list, pattern: list) -> Json:
     """
     A util function for creating a json object for a shaped recipe
 
@@ -118,7 +120,7 @@ def create_shaped_json(name, output, output_count, items, blocks, item_key, bloc
     return json_object
 
 
-def create_shapeless_json(name, output, output_count, items, blocks):
+def create_shapeless_json(name: str, output: str, output_count: int, items: dict, blocks: dict) -> Json:
     """
     A util function for creating a json object for a shapeless recipe
 
@@ -137,7 +139,7 @@ def create_shapeless_json(name, output, output_count, items, blocks):
     return json_object
 
 
-def get_logger(name, debug=False):
+def get_logger(name: str, debug: bool = False) -> logging.Logger:
     """
     A util function that creates a logging object and return it to the caller
 

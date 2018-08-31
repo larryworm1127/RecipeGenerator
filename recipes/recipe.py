@@ -10,7 +10,7 @@ from logging import Logger
 from dataclasses import dataclass, field
 from typing import Union
 
-from recipes import util
+from . import util
 
 
 # recipe classes
@@ -19,8 +19,8 @@ class ShapelessRecipe:
     # recipe variables
     name: str
     output: str
-    item_input: Union[list, None]
-    block_input: Union[list, None]
+    item_input: Union[dict, None]
+    block_input: Union[dict, None]
     output_count: int = 1
     type: str = "crafting_shapeless"
 
@@ -38,8 +38,8 @@ class ShapedRecipe:
     # recipe variables
     name: str
     output: str
-    item_input: Union[list, None]
-    block_input: Union[list, None]
+    item_input: Union[dict, None]
+    block_input: Union[dict, None]
     pattern: list
     output_count: int = 1
     type: str = "crafting_shaped"

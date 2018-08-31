@@ -8,8 +8,9 @@ Python module that generates a JSON file for recipe created by the user
 # general imports
 from json import dump
 from os.path import join, expanduser, exists
+from typing import NoReturn, Union
 
-from recipes import util
+from . import util, ShapelessRecipe, ShapedRecipe
 
 # constants
 RECIPE_PATH = expanduser('~')
@@ -19,7 +20,7 @@ RECIPE_PATH = expanduser('~')
 class Json:
     """Class for recipe json object"""
 
-    def __init__(self, recipe):
+    def __init__(self, recipe: Union[ShapedRecipe, ShapelessRecipe]):
         # initialize variables
         self._recipe = recipe
         self._name = recipe.name
@@ -36,7 +37,7 @@ class Json:
             self._result = {"type": "minecraft:" + self._type, "ingredients": [], "result": {}}
             self.create_shapeless_json()
 
-    def __str__(self):
+    def __str__(self) -> str:
         self._logger.info("Create string representation of JSON recipe")
 
         # variables
@@ -121,17 +122,17 @@ class Json:
 
         return result
 
-    def get_json(self):
+    def get_json(self) -> dict:
         """Get method for json resultant"""
 
         return self._result
 
-    def get_name(self):
+    def get_name(self) -> str:
         """Get method for name of the recipe"""
 
         return self._name
 
-    def create_shaped_json(self):
+    def create_shaped_json(self) -> NoReturn:
         """Method that creates a shaped recipe json using given recipe class"""
 
         self._logger.info("Create shaped JSON recipe")
@@ -158,7 +159,7 @@ class Json:
         self._result["result"]["item"] = output
         self._result["result"]["count"] = int(self._recipe.output_count)
 
-    def create_shapeless_json(self):
+    def create_shapeless_json(self) -> NoReturn:
         """Method that creates a shapeless recipe json using given recipe class"""
 
         self._logger.info("Create shapeless JSON recipe")
@@ -180,7 +181,7 @@ class Json:
         self._result["result"]["item"] = output
         self._result["result"]["count"] = int(self._recipe.output_count)
 
-    def generator(self, base_path):
+    def generator(self, base_path: str) -> bool:
         """
         Method that creates the json file with given dir path
         and the created resultant json

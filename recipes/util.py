@@ -6,14 +6,10 @@ Python module that contains utility functions
 """
 
 # general imports
-import logging
-import sys
+from .recipe import ShapedRecipe, ShapelessRecipe
+from .recipe_json import JsonRecipe
 
-from logging.handlers import TimedRotatingFileHandler
-from os.path import join, exists
-from os import mkdir
-
-from . import Json, ShapedRecipe, ShapelessRecipe
+__all__ = ["verify_data", "create_shaped_json", "create_shapeless_json", "STATE"]
 
 # constants
 STATE = {0: "PASS",
@@ -95,7 +91,7 @@ def verify_data(recipe_type: str, output: str, items: list, blocks: list, item_k
 
 
 def create_shaped_json(name: str, output: str, output_count: int, items: list, blocks: list, item_key: list,
-                       block_key: list, pattern: list) -> Json:
+                       block_key: list, pattern: list) -> JsonRecipe:
     """
     A util function for creating a json object for a shaped recipe
 
@@ -114,13 +110,13 @@ def create_shaped_json(name: str, output: str, output_count: int, items: list, b
 
     # create json object
     recipe_object = ShapedRecipe(name, output, item_input, block_input, pattern, output_count)
-    json_object = Json(recipe_object)
+    json_object = JsonRecipe(recipe_object)
 
     # return json object for other uses
     return json_object
 
 
-def create_shapeless_json(name: str, output: str, output_count: int, items: dict, blocks: dict) -> Json:
+def create_shapeless_json(name: str, output: str, output_count: int, items: list, blocks: list) -> JsonRecipe:
     """
     A util function for creating a json object for a shapeless recipe
 
@@ -133,48 +129,7 @@ def create_shapeless_json(name: str, output: str, output_count: int, items: dict
     """
     # create json object
     recipe_object = ShapelessRecipe(name, output, items, blocks, output_count)
-    json_object = Json(recipe_object)
+    json_object = JsonRecipe(recipe_object)
 
     # return json object for other uses
     return json_object
-
-
-def get_logger(name: str, debug: bool = False) -> logging.Logger:
-    """
-    A util function that creates a logging object and return it to the caller
-
-    :param debug: optional parameter to avoid file path error when running tests
-    :param name: the name of the logger
-    :return: a logger object
-    """
-
-    # create logger
-    logger = logging.getLogger(name)
-    logger.setLevel(logging.DEBUG)
-
-    # don't create stream handler or file handler if debug is true
-    if not debug:
-        # create log file folder
-        log_path = join(sys.path[0], 'logs')
-        if not exists(log_path):
-            mkdir(log_path)
-
-        # create formatter
-        file_formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
-        file_formatter.datefmt = '%m-%d %H:%M'
-        console_formatter = logging.Formatter('%(name)-16s: %(levelname)-7s - %(message)s')
-
-        # create file handler and set level to debug
-        file_handler = TimedRotatingFileHandler(join("logs", "latest_logs.log"), when='m', interval=1)
-        file_handler.setLevel(logging.DEBUG)
-        file_handler.setFormatter(file_formatter)
-        logger.addHandler(file_handler)
-
-        # create console handler and set level to debug
-        console_handler = logging.StreamHandler()
-        console_handler.setLevel(logging.DEBUG)
-        console_handler.setFormatter(console_formatter)
-        logger.addHandler(console_handler)
-
-    # return logger object
-    return logger

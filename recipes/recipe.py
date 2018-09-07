@@ -10,7 +10,9 @@ from logging import Logger
 from dataclasses import dataclass, field
 from typing import Union
 
-from . import util
+from .logger import get_logger
+
+__all__ = ["ShapelessRecipe", "ShapedRecipe"]
 
 
 # recipe classes
@@ -19,8 +21,8 @@ class ShapelessRecipe:
     # recipe variables
     name: str
     output: str
-    item_input: Union[dict, None]
-    block_input: Union[dict, None]
+    item_input: Union[list, None]
+    block_input: Union[list, None]
     output_count: int = 1
     type: str = "crafting_shapeless"
 
@@ -29,7 +31,7 @@ class ShapelessRecipe:
     logger: Logger = field(init=False)
 
     def __post_init__(self):
-        self.logger = util.get_logger("recipe.ShapelessRecipe", self.debug)
+        self.logger = get_logger("recipe.ShapelessRecipe", self.debug)
         self.logger.info("Shapeless recipe object created")
 
 
@@ -49,5 +51,5 @@ class ShapedRecipe:
     logger: Logger = field(init=False)
 
     def __post_init__(self):
-        self.logger = util.get_logger("recipe.ShapedRecipe", self.debug)
+        self.logger = get_logger("recipe.ShapedRecipe", self.debug)
         self.logger.info("Shaped recipe object created")

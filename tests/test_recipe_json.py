@@ -11,7 +11,8 @@ from os.path import exists, join
 from sys import path
 from json import load
 
-from recipes import ShapedRecipe, Json, ShapelessRecipe
+from recipes.recipe import ShapedRecipe, ShapelessRecipe
+from recipes.recipe_json import JsonRecipe
 
 # path constant
 JSON_GENERATOR_PATH = join(path[0], 'tests', 'json_generator_folder')
@@ -30,10 +31,10 @@ class TestJson(unittest.TestCase):
         self.shaped_count_two = ShapedRecipe("shaped4", "mod:item_test", {'A': "mod:item_test"}, None,
                                              [" A ", " A ", " A "], 2, debug=True)
 
-        self.json_shaped_item = Json(self.shaped_item)
-        self.json_shaped_block = Json(self.shaped_block)
-        self.json_shaped_item_block = Json(self.shaped_item_block)
-        self.json_shaped_count_two = Json(self.shaped_count_two)
+        self.json_shaped_item = JsonRecipe(self.shaped_item)
+        self.json_shaped_block = JsonRecipe(self.shaped_block)
+        self.json_shaped_item_block = JsonRecipe(self.shaped_item_block)
+        self.json_shaped_count_two = JsonRecipe(self.shaped_count_two)
 
         with open(join(JSON_RESULT_PATH, 'shaped_item_only.json')) as shaped_item_file:
             self.shaped_item_expected = load(shaped_item_file)
@@ -50,10 +51,10 @@ class TestJson(unittest.TestCase):
         self.shapeless_item_block = ShapelessRecipe("shapeless3", "mod:item_test", ["mod:item_test"], ["mod:block_test"], debug=True)
         self.shapeless_count_two = ShapelessRecipe("shapeless4", "mod:item_test", None, ["mod:block_test"], 2, debug=True)
 
-        self.json_shapeless_item = Json(self.shapeless_item)
-        self.json_shapeless_block = Json(self.shapeless_block)
-        self.json_shapeless_item_block = Json(self.shapeless_item_block)
-        self.json_shapeless_count_two = Json(self.shapeless_count_two)
+        self.json_shapeless_item = JsonRecipe(self.shapeless_item)
+        self.json_shapeless_block = JsonRecipe(self.shapeless_block)
+        self.json_shapeless_item_block = JsonRecipe(self.shapeless_item_block)
+        self.json_shapeless_count_two = JsonRecipe(self.shapeless_count_two)
 
         with open(join(JSON_RESULT_PATH, 'shapeless_item_only.json')) as shapeless_item_only_file:
             self.shapeless_item_expected = load(shapeless_item_only_file)

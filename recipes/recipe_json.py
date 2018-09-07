@@ -10,14 +10,17 @@ from json import dump
 from os.path import join, expanduser, exists
 from typing import NoReturn, Union
 
-from . import util, ShapelessRecipe, ShapedRecipe
+from .recipe import ShapelessRecipe, ShapedRecipe
+from .logger import get_logger
+
+__all__ = ["JsonRecipe"]
 
 # constants
 RECIPE_PATH = expanduser('~')
 
 
 # json class
-class Json:
+class JsonRecipe:
     """Class for recipe json object"""
 
     def __init__(self, recipe: Union[ShapedRecipe, ShapelessRecipe]):
@@ -25,7 +28,7 @@ class Json:
         self._recipe = recipe
         self._name = recipe.name
         self._type = recipe.type
-        self._logger = util.get_logger("recipe_json.Json", recipe.debug)
+        self._logger = get_logger("recipe_json.Json", recipe.debug)
 
         # actions for shaped recipe
         if self._type == "crafting_shaped":

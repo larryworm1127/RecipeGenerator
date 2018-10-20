@@ -18,14 +18,12 @@ __all__ = ["get_logger"]
 
 # logger initialization
 def get_logger(name: str, debug: bool = False) -> logging.Logger:
-    """
-    A util function that creates a logging object and return it to the caller
+    """Creates a logging object and return it to the caller
 
     :param debug: optional parameter to avoid file path error when running tests
     :param name: the name of the logger
     :return: a logger object
     """
-
     # create logger
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
@@ -38,12 +36,15 @@ def get_logger(name: str, debug: bool = False) -> logging.Logger:
             mkdir(log_path)
 
         # create formatter
-        file_formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+        file_formatter = logging.Formatter(
+            '%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
         file_formatter.datefmt = '%m-%d %H:%M'
-        console_formatter = logging.Formatter('%(name)-16s: %(levelname)-7s - %(message)s')
+        console_formatter = logging.Formatter(
+            '%(name)-16s: %(levelname)-7s - %(message)s')
 
         # create file handler and set level to debug
-        file_handler = TimedRotatingFileHandler(join("logs", "latest_logs.log"), when='m', interval=1)
+        file_handler = TimedRotatingFileHandler(join("logs", "latest_logs.log"),
+                                                when='m', interval=1)
         file_handler.setLevel(logging.DEBUG)
         file_handler.setFormatter(file_formatter)
         logger.addHandler(file_handler)

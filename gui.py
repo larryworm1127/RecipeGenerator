@@ -13,7 +13,8 @@ import tkinter as tk
 from os.path import expanduser
 from tkinter import filedialog, messagebox
 
-from recipes.util import create_shaped_json, create_shapeless_json, verify_data, STATE
+from recipes.util import create_shaped_json, create_shapeless_json, \
+    verify_data, STATE
 from recipes.logger import get_logger
 
 # constants
@@ -48,16 +49,22 @@ class IntroPage:
 
         # radio buttons
         self._choice = tk.IntVar()
-        self._radio_one = tk.Radiobutton(master, text="Shaped", variable=self._choice, value=1, font=DEF_FONT)
-        self._radio_two = tk.Radiobutton(master, text="Shapeless", variable=self._choice, value=2, font=DEF_FONT)
+        self._radio_one = tk.Radiobutton(master, text="Shaped",
+                                         variable=self._choice, value=1,
+                                         font=DEF_FONT)
+        self._radio_two = tk.Radiobutton(master, text="Shapeless",
+                                         variable=self._choice, value=2,
+                                         font=DEF_FONT)
 
         # entries
         self._file_path_entry = tk.Entry(master)
         self._file_path_entry.insert(0, self._dir_path)
 
         # buttons
-        self._next_button = tk.Button(master, text="Next", command=self.next_step, font=DEF_FONT)
-        self._browse_button = tk.Button(master, text="Browse", command=self.browse_csv, font=DEF_FONT)
+        self._next_button = tk.Button(master, text="Next",
+                                      command=self.next_step, font=DEF_FONT)
+        self._browse_button = tk.Button(master, text="Browse",
+                                        command=self.browse_csv, font=DEF_FONT)
 
         # LAYOUT
         self._logger.info("Initialize GUI layout")
@@ -132,9 +139,12 @@ class MainPage:
 
         # labels
         self._output_label = tk.Label(master, text="Output:", font=LABEL_FONT)
-        self._output_count_label = tk.Label(master, text="Count:", font=LABEL_FONT)
-        self._item_input_label = tk.Label(master, text="Item Input:", font=LABEL_FONT)
-        self._block_input_label = tk.Label(master, text="Block Input:", font=LABEL_FONT)
+        self._output_count_label = tk.Label(master, text="Count:",
+                                            font=LABEL_FONT)
+        self._item_input_label = tk.Label(master, text="Item Input:",
+                                          font=LABEL_FONT)
+        self._block_input_label = tk.Label(master, text="Block Input:",
+                                           font=LABEL_FONT)
 
         # entries
         self._output_entry = tk.Entry(master)
@@ -145,16 +155,21 @@ class MainPage:
 
         # shaped labels and entries
         self._pattern_label = tk.Label(master, text="Pattern:", font=LABEL_FONT)
-        self._pattern_entries = [[tk.Entry(master, width=5) for _ in range(3)] for _ in range(3)]
+        self._pattern_entries = [[tk.Entry(master, width=5) for _ in range(3)]
+                                 for _ in range(3)]
 
         self._item_key_entries = [tk.Entry(master, width=3) for _ in range(9)]
         self._block_key_entries = [tk.Entry(master, width=3) for _ in range(9)]
 
         # buttons
-        self._preview_button = tk.Button(master, text="Preview", command=self.preview, font=DEF_FONT)
-        self._create_button = tk.Button(master, text="Create", command=self.create, font=DEF_FONT)
-        self._back_button = tk.Button(master, text="Back", command=self.back, font=DEF_FONT)
-        self._reset_button = tk.Button(master, text="Reset", command=self.reset, font=DEF_FONT)
+        self._preview_button = tk.Button(master, text="Preview",
+                                         command=self.preview, font=DEF_FONT)
+        self._create_button = tk.Button(master, text="Create",
+                                        command=self.create, font=DEF_FONT)
+        self._back_button = tk.Button(master, text="Back", command=self.back,
+                                      font=DEF_FONT)
+        self._reset_button = tk.Button(master, text="Reset", command=self.reset,
+                                       font=DEF_FONT)
 
         # LAYOUT
         self._logger.info("Initialize GUI layout")
@@ -171,8 +186,10 @@ class MainPage:
 
         # item inputs and block inputs entries grid
         for index in range(9):
-            self._item_input_entries[index].grid(row=4 + index, column=1, sticky=tk.W)
-            self._block_input_entries[index].grid(row=4 + index, column=4, sticky=tk.W)
+            self._item_input_entries[index].grid(row=4 + index, column=1,
+                                                 sticky=tk.W)
+            self._block_input_entries[index].grid(row=4 + index, column=4,
+                                                  sticky=tk.W)
 
         # conditional item grid
         if self._type == "Shaped":
@@ -207,11 +224,13 @@ class MainPage:
         for row in range(3):
             for column in range(3):
                 if column == 0:
-                    self._pattern_entries[row][column].grid(row=row, column=1, sticky=tk.W)
+                    self._pattern_entries[row][column].grid(row=row, column=1,
+                                                            sticky=tk.W)
                 elif column == 1:
                     self._pattern_entries[row][column].grid(row=row, column=1)
                 else:
-                    self._pattern_entries[row][column].grid(row=row, column=1, sticky=tk.E)
+                    self._pattern_entries[row][column].grid(row=row, column=1,
+                                                            sticky=tk.E)
 
         # item input and block input grid and config
         for index in range(9):
@@ -219,8 +238,10 @@ class MainPage:
             self._block_input_entries[index].configure(width=15)
             self._item_input_entries[index].grid(sticky=tk.E)
             self._block_input_entries[index].grid(sticky=tk.E)
-            self._item_key_entries[index].grid(row=4 + index, column=1, sticky=tk.W)
-            self._block_key_entries[index].grid(row=4 + index, column=4, sticky=tk.W)
+            self._item_key_entries[index].grid(row=4 + index, column=1,
+                                               sticky=tk.W)
+            self._block_key_entries[index].grid(row=4 + index, column=4,
+                                                sticky=tk.W)
 
     def shapeless_layout(self):
         """Helper function for setting up GUI for shapeless recipe"""
@@ -261,7 +282,8 @@ class MainPage:
         """Event handler for Back button"""
 
         self._logger.info("Back")
-        choice = tk.messagebox.askokcancel("Warning!", "All the data typed in will be lost if you choose to go back!")
+        message = "All the data typed in will be lost if you choose to go back!"
+        choice = tk.messagebox.askokcancel("Warning!", message)
 
         # return to type select page if user confirms the choice
         if choice:
@@ -273,7 +295,8 @@ class MainPage:
     def reset(self):
         """Event handler for Reset Button"""
         self._logger.info("Reset")
-        choice = tk.messagebox.askokcancel("Warning!", "All the data typed in will be lost if you choose to reset!")
+        message = "All the data typed in will be lost if you choose to reset!"
+        choice = tk.messagebox.askokcancel("Warning!", message)
 
         if choice:
             self._master.destroy()
@@ -291,23 +314,27 @@ class MainPage:
         complete = recipe_json.generator(self._dir_path)
 
         if complete:
-            tk.messagebox.showinfo("Success!", "The recipe file has been created.")
+            message = "The recipe file has been created."
+            tk.messagebox.showinfo("Success!", message)
         else:
-            tk.messagebox.showerror("Error!", "The creation of the file has failed.")
+            message = "The creation of the file has failed."
+            tk.messagebox.showerror("Error!", message)
 
     def collect_and_verify_data(self):
-        """Helper function that collect the data from entries and return the data to the caller"""
+        """Collect the data from entries and return the data to the caller"""
 
         self._logger.info("Collect and verify data")
 
         # Retrieve Data from Entries
         # outputs
         output = self._output_entry.get()
-        output_count = self._output_count_entry.get() if self._output_count_entry.get() != '' else 1
+        output_count = self._output_count_entry.get() if \
+            self._output_count_entry.get() != '' else 1
 
         # items and blocks
         items, blocks = [], []
-        for item_entry, block_entry in zip(self._item_input_entries, self._block_input_entries):
+        for item_entry, block_entry in zip(self._item_input_entries,
+                                           self._block_input_entries):
             if item_entry.get() != '':
                 items.append(item_entry.get())
             if block_entry.get() != '':
@@ -318,7 +345,8 @@ class MainPage:
 
             # item keys and block keys
             item_keys, block_keys = [], []
-            for item_entry, block_entry in zip(self._item_key_entries, self._block_key_entries):
+            for item_entry, block_entry in zip(self._item_key_entries,
+                                               self._block_key_entries):
                 if item_entry.get() != '':
                     item_keys.append(item_entry.get())
                 if block_entry.get() != '':
@@ -338,10 +366,12 @@ class MainPage:
                 pattern.append(string_row)
 
             # verify the data
-            state, message = verify_data(self._type, output, items, blocks, item_keys, block_keys, pattern)
+            state, message = verify_data(self._type, output, items, blocks,
+                                         item_keys, block_keys, pattern)
             if STATE[state] == "PASS":
                 self._logger.info("Data verified")
-                recipe_json = create_shaped_json(output.split(':')[1], output, output_count, items, blocks,
+                recipe_json = create_shaped_json(output.split(':')[1], output,
+                                                 output_count, items, blocks,
                                                  item_keys, block_keys, pattern)
             else:
                 self._logger.error(message)
@@ -354,7 +384,9 @@ class MainPage:
             state, message = verify_data(self._type, output, items, blocks)
             if STATE[state] == "PASS":
                 self._logger.info("Data verified")
-                recipe_json = create_shapeless_json(output.split(':')[1], output, output_count, items, blocks)
+                recipe_json = create_shapeless_json(output.split(':')[1],
+                                                    output, output_count, items,
+                                                    blocks)
             else:
                 self._logger.error(message)
                 tk.messagebox.showerror("Error!", message)

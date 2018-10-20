@@ -32,12 +32,14 @@ class JsonRecipe:
 
         # actions for shaped recipe
         if self._type == "crafting_shaped":
-            self._result = {"type": "minecraft:" + self._type, "pattern": [], "key": {}, "result": {}}
+            self._result = {"type": "minecraft:" + self._type, "pattern": [],
+                            "key": {}, "result": {}}
             self.create_shaped_json()
 
         # actions for shapeless recipe
         else:
-            self._result = {"type": "minecraft:" + self._type, "ingredients": [], "result": {}}
+            self._result = {"type": "minecraft:" + self._type,
+                            "ingredients": [], "result": {}}
             self.create_shapeless_json()
 
     def __str__(self) -> str:
@@ -69,9 +71,11 @@ class JsonRecipe:
 
                             # determine whether to add comma at the end or not
                             if count_inner_two == len(value):
-                                result += "      {}: {} \n".format(repr(item_key_two), repr(value_two))
+                                result += "      {}: {} \n".format(
+                                    repr(item_key_two), repr(value_two))
                             else:
-                                result += "      {}: {}, \n".format(repr(item_key_two), repr(value_two))
+                                result += "      {}: {}, \n".format(
+                                    repr(item_key_two), repr(value_two))
 
                             count_inner_two += 1
 
@@ -86,9 +90,11 @@ class JsonRecipe:
 
                         # determine whether to add comma at the end or not
                         if count_inner == len(item):
-                            result += "    {}: {} \n".format(repr(item_key), repr(value))
+                            result += "    {}: {} \n".format(repr(item_key),
+                                                             repr(value))
                         else:
-                            result += "    {}: {}, \n".format(repr(item_key), repr(value))
+                            result += "    {}: {}, \n".format(repr(item_key),
+                                                              repr(value))
 
                     count_inner += 1
 
@@ -127,17 +133,15 @@ class JsonRecipe:
 
     def get_json(self) -> dict:
         """Get method for json resultant"""
-
         return self._result
 
     def get_name(self) -> str:
         """Get method for name of the recipe"""
-
         return self._name
 
-    def create_shaped_json(self) -> NoReturn:
-        """Method that creates a shaped recipe json using given recipe class"""
-
+    def create_shaped_json(self) -> None:
+        """Creates a shaped recipe json using given recipe class
+        """
         self._logger.info("Create shaped JSON recipe")
 
         # pattern
@@ -162,9 +166,9 @@ class JsonRecipe:
         self._result["result"]["item"] = output
         self._result["result"]["count"] = int(self._recipe.output_count)
 
-    def create_shapeless_json(self) -> NoReturn:
-        """Method that creates a shapeless recipe json using given recipe class"""
-
+    def create_shapeless_json(self) -> None:
+        """Creates a shapeless recipe json using given recipe class
+        """
         self._logger.info("Create shapeless JSON recipe")
 
         # item ingredients
@@ -185,14 +189,11 @@ class JsonRecipe:
         self._result["result"]["count"] = int(self._recipe.output_count)
 
     def generator(self, base_path: str) -> bool:
-        """
-        Method that creates the json file with given dir path
-        and the created resultant json
+        """Creates the json file from the given dir path
 
         :param base_path: the path of the directory
         :return: boolean of whether the file creation was successful
         """
-
         self._logger.info("Create JSON recipe file at given file location")
 
         path = join(base_path, self._name + '.json')

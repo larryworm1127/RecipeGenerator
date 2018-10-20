@@ -9,7 +9,8 @@ Python module that contains utility functions
 from .recipe import ShapedRecipe, ShapelessRecipe
 from .recipe_json import JsonRecipe
 
-__all__ = ["verify_data", "create_shaped_json", "create_shapeless_json", "STATE"]
+__all__ = ["verify_data", "create_shaped_json", "create_shapeless_json",
+           "STATE"]
 
 # constants
 STATE = {0: "PASS",
@@ -26,11 +27,10 @@ LOGGING_LEVEL = {
 
 
 # util functions
-def verify_data(recipe_type: str, output: str, items: list, blocks: list, item_keys: list = None,
-                block_keys: list = None, pattern: list = None) -> tuple:
-    """
-    A util function that checks whether the user entered
-    all required data and whether the data is valid or not
+def verify_data(recipe_type: str, output: str, items: list, blocks: list,
+                item_keys: list = None, block_keys: list = None,
+                pattern: list = None) -> tuple:
+    """Checks the validity of user input
 
     :param recipe_type: the type of recipe
     :param output: the output of the recipe
@@ -54,7 +54,8 @@ def verify_data(recipe_type: str, output: str, items: list, blocks: list, item_k
     if recipe_type == "Shaped":
 
         # check pattern
-        if len(pattern[0]) == 0 and len(pattern[1]) == 0 and len(pattern[2]) == 0:
+        if len(pattern[0]) == 0 and len(pattern[1]) == 0 and len(
+                pattern[2]) == 0:
             return 2, "Pattern is empty."
         else:
             keys = set([key for row in pattern for key in row])
@@ -90,10 +91,10 @@ def verify_data(recipe_type: str, output: str, items: list, blocks: list, item_k
         return 0, "Pass"
 
 
-def create_shaped_json(name: str, output: str, output_count: int, items: list, blocks: list, item_key: list,
-                       block_key: list, pattern: list) -> JsonRecipe:
-    """
-    A util function for creating a json object for a shaped recipe
+def create_shaped_json(name: str, output: str, output_count: int, items: list,
+                       blocks: list, item_key: list, block_key: list,
+                       pattern: list) -> JsonRecipe:
+    """Creating a json object for a shaped recipe
 
     :param name: the name of the recipe
     :param output: the output of the recipe
@@ -109,16 +110,17 @@ def create_shaped_json(name: str, output: str, output_count: int, items: list, b
     block_input = {key: block for key, block in zip(block_key, blocks)}
 
     # create json object
-    recipe_object = ShapedRecipe(name, output, item_input, block_input, pattern, output_count)
+    recipe_object = ShapedRecipe(name, output, item_input, block_input, pattern,
+                                 output_count)
     json_object = JsonRecipe(recipe_object)
 
     # return json object for other uses
     return json_object
 
 
-def create_shapeless_json(name: str, output: str, output_count: int, items: list, blocks: list) -> JsonRecipe:
-    """
-    A util function for creating a json object for a shapeless recipe
+def create_shapeless_json(name: str, output: str, output_count: int,
+                          items: list, blocks: list) -> JsonRecipe:
+    """Creating a json object for a shapeless recipe
 
     :param name: the name of the recipe
     :param output: the output of the recipe

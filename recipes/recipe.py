@@ -6,9 +6,9 @@ Python module that contains two classes for Shaped and Shapeless recipes
 """
 
 # general import
+from copy import copy
 from logging import Logger
-from dataclasses import dataclass, field
-from typing import Union
+from typing import Union, List, Dict
 
 from .logger import get_logger
 
@@ -16,40 +16,64 @@ __all__ = ["ShapelessRecipe", "ShapedRecipe"]
 
 
 # recipe classes
-@dataclass
 class ShapelessRecipe:
-    # recipe variables
+    """A class representing a shapeless Minecraft recipe.
+    """
     name: str
     output: str
-    item_input: Union[list, None]
-    block_input: Union[list, None]
-    output_count: int = 1
-    type: str = "crafting_shapeless"
+    output_count: int
+    debug: bool
+    logger: Logger
+    item_input: Union[List[str], Dict[str, str]]
+    block_input: Union[List[str], Dict[str, str]]
+    type: str
 
-    # logging
-    debug: bool = False
-    logger: Logger = field(init=False)
+    def __init__(self,
+                 name: str,
+                 output: str,
+                 item_input: Union[List[str], Dict[str, str]],
+                 block_input: Union[List[str], Dict[str, str]],
+                 output_count: int = 1,
+                 debug: bool = False) -> None:
+        """Shapeless recipe initializer.
+        """
+        # Recipe attributes
+        self.name = name
+        self.output = output
+        self.output_count = output_count
+        self.item_input = copy(item_input)
+        self.block_input = copy(block_input)
+        self.debug = debug
+        self.type = "crafting_shapeless"
 
-    def __post_init__(self):
-        self.logger = get_logger("recipe.ShapelessRecipe", self.debug)
+        # Logger
+        self.logger = get_logger("recipe.recipe", self.debug)
+        self.init_log()
+
+    def init_log(self):
         self.logger.info("Shapeless recipe object created")
 
 
-@dataclass
-class ShapedRecipe:
-    # recipe variables
-    name: str
-    output: str
-    item_input: Union[dict, None]
-    block_input: Union[dict, None]
+class ShapedRecipe(ShapelessRecipe):
+    """A class representing a shaped Minecraft recipe.
+    """
+    item_input: Dict[str, str]
+    block_input: Dict[str, str]
     pattern: list
-    output_count: int = 1
-    type: str = "crafting_shaped"
 
-    # logging
-    debug: bool = False
-    logger: Logger = field(init=False)
+    def __init__(self,
+                 name: str,
+                 output: str,
+                 item_input: Dict[str, str],
+                 block_input: Dict[str, str],
+                 pattern: List[str],
+                 count: int = 1,
+                 debug: bool = False):
+        """Shaped recipe initializer.
+        """
+        super().__init__(name, output, item_input, block_input, count, debug)
+        self.pattern = copy(pattern)
+        self.type = "crafting_shaped"
 
-    def __post_init__(self):
-        self.logger = get_logger("recipe.ShapedRecipe", self.debug)
+    def init_log(self):
         self.logger.info("Shaped recipe object created")

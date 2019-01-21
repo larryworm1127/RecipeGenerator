@@ -27,8 +27,12 @@ LOGGING_LEVEL = {
 
 
 # util functions
-def verify_data(recipe_type: str, output: str, items: list, blocks: list,
-                item_keys: list = None, block_keys: list = None,
+def verify_data(recipe_type: str,
+                output: str,
+                items: list,
+                blocks: list,
+                item_keys: list = None,
+                block_keys: list = None,
                 pattern: list = None) -> tuple:
     """Checks the validity of user input
 
@@ -76,7 +80,7 @@ def verify_data(recipe_type: str, output: str, items: list, blocks: list,
                 return 2, "Block key not in pattern."
 
         if len(keys) > 0:
-            return 2, "Number of keys doesn't match pattern."
+            return 2, "# of keys don't match pattern."
 
         # default is pass
         return 0, "Pass"
@@ -85,14 +89,19 @@ def verify_data(recipe_type: str, output: str, items: list, blocks: list,
     else:
         # check item input and block input
         if len(items) == 0 and len(blocks) == 0:
-            return 2, "Both item input and block input are empty."
+            return 2, "Item and block input are empty."
 
         # default is pass
         return 0, "Pass"
 
 
-def create_shaped_json(name: str, output: str, output_count: int, items: list,
-                       blocks: list, item_key: list, block_key: list,
+def create_shaped_json(name: str,
+                       output: str,
+                       output_count: int,
+                       items: list,
+                       blocks: list,
+                       item_key: list,
+                       block_key: list,
                        pattern: list) -> JsonRecipe:
     """Creating a json object for a shaped recipe
 
@@ -118,8 +127,11 @@ def create_shaped_json(name: str, output: str, output_count: int, items: list,
     return json_object
 
 
-def create_shapeless_json(name: str, output: str, output_count: int,
-                          items: list, blocks: list) -> JsonRecipe:
+def create_shapeless_json(name: str,
+                          output: str,
+                          output_count: int,
+                          items: list,
+                          blocks: list) -> JsonRecipe:
     """Creating a json object for a shapeless recipe
 
     :param name: the name of the recipe

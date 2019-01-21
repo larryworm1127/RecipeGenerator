@@ -8,7 +8,7 @@ Python module that generates a JSON file for recipe created by the user
 # general imports
 from json import dump
 from os.path import join, expanduser, exists
-from typing import NoReturn, Union
+from typing import Union
 
 from .recipe import ShapelessRecipe, ShapedRecipe
 from .logger import get_logger
@@ -53,7 +53,7 @@ class JsonRecipe:
         for key, item in self._result.items():
             # one item case - item is string
             if isinstance(item, str):
-                result += "  {}: {} \n".format(repr(key), repr(item))
+                result += f"  {repr(key)}: {repr(item)} \n"
 
             # multiple item case - item is dict
             elif isinstance(item, dict):
@@ -71,11 +71,11 @@ class JsonRecipe:
 
                             # determine whether to add comma at the end or not
                             if count_inner_two == len(value):
-                                result += "      {}: {} \n".format(
-                                    repr(item_key_two), repr(value_two))
+                                result += f"      {repr(item_key_two)}: " \
+                                    f"{repr(value_two)} \n"
                             else:
-                                result += "      {}: {}, \n".format(
-                                    repr(item_key_two), repr(value_two))
+                                result += f"      {repr(item_key_two)}: " \
+                                    f"{repr(value_two)}, \n"
 
                             count_inner_two += 1
 
@@ -90,11 +90,9 @@ class JsonRecipe:
 
                         # determine whether to add comma at the end or not
                         if count_inner == len(item):
-                            result += "    {}: {} \n".format(repr(item_key),
-                                                             repr(value))
+                            result += f"    {repr(item_key)}: {repr(value)} \n"
                         else:
-                            result += "    {}: {}, \n".format(repr(item_key),
-                                                              repr(value))
+                            result += f"    {repr(item_key)}: {repr(value)}, \n"
 
                     count_inner += 1
 
@@ -106,16 +104,16 @@ class JsonRecipe:
 
             # multiple item case - item is list
             else:
-                result += "  {}: [ \n".format(repr(key))
+                result += f"  {repr(key)}: [ \n"
 
                 count_inner = 1
                 for value in item:
 
                     # determine whether to add comma at the end or not
                     if count_inner == len(item):
-                        result += "    {} \n".format(repr(value))
+                        result += f"    {repr(value)} \n"
                     else:
-                        result += "    {}, \n".format(repr(value))
+                        result += f"    {repr(value)}, \n"
 
                     count_inner += 1
 

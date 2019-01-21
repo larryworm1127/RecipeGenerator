@@ -16,7 +16,7 @@ class TestUtil(unittest.TestCase):
         # TRUE CASES
         # Shaped Recipes
         # item and block input verify
-        self.true_case1 = verify_data(
+        self.tcase1 = verify_data(
             "Shaped", 'mod:item',
             ["i", "i", "i", "i", "i", "i", "i", "i", "i"],
             [],
@@ -25,7 +25,7 @@ class TestUtil(unittest.TestCase):
             ["ABC", "DEF", "GHI"]
         )
 
-        self.true_case2 = verify_data(
+        self.tcase2 = verify_data(
             "Shaped", "mod:item",
             [],
             ["b", "b", "b", "b", "b", "b", "b", "b", "b"],
@@ -34,7 +34,7 @@ class TestUtil(unittest.TestCase):
             ["ABC", "DEF", "GHI"]
         )
 
-        self.true_case3 = verify_data(
+        self.tcase3 = verify_data(
             "Shaped", 'mod:item',
             ["i", "i", "i", "i", "i"],
             ["b", "b", "b", "b"],
@@ -43,7 +43,7 @@ class TestUtil(unittest.TestCase):
             ["ABC", "DEF", "GHI"]
         )
 
-        self.true_case9 = verify_data(
+        self.tcase9 = verify_data(
             "Shaped", 'mod:item',
             ["item_one", "item_two"],
             [],
@@ -52,7 +52,7 @@ class TestUtil(unittest.TestCase):
             [" A ", " A ", " B "]
         )
 
-        self.true_case10 = verify_data(
+        self.tcase10 = verify_data(
             "Shaped", 'mod:item',
             ["item_one", "item_two"],
             [],
@@ -62,29 +62,28 @@ class TestUtil(unittest.TestCase):
         )
 
         # pattern
-        self.true_case4 = verify_data("Shaped", 'mod:i', ["i"], [], ['A'], [],
-                                      ["AA", "AA", ""])
-        self.true_case5 = verify_data("Shaped", 'mod:i', ["i"], [], ['A'], [],
-                                      ["A", "", ""])
+        self.tcase4 = verify_data("Shaped", 'mod:i', ["i"], [], ['A'], [],
+                                  ["AA", "AA", ""])
+        self.tcase5 = verify_data("Shaped", 'mod:i', ["i"], [], ['A'], [],
+                                  ["A", "", ""])
 
         # Shapeless Recipes
-        self.true_case6 = verify_data("Shapeless", "mod:i",
-                                      ["mod:i1", "mod:i2"], [])
-        self.true_case7 = verify_data("Shapeless", "mod:i", [],
-                                      ["mod:b1", "mod:b2"])
-        self.true_case8 = verify_data("Shapeless", "mod:i", ["mod:i"],
-                                      ["mod:b"])
+        self.tcase6 = verify_data("Shapeless", "mod:i",
+                                  ["mod:i1", "mod:i2"], [])
+        self.tcase7 = verify_data("Shapeless", "mod:i", [],
+                                  ["mod:b1", "mod:b2"])
+        self.tcase8 = verify_data("Shapeless", "mod:i", ["mod:i"], ["mod:b"])
 
         # FALSE CASES
         # Shaped Recipe
         # item and block input verify
-        self.false_case1 = verify_data(
+        self.fcase1 = verify_data(
             "Shaped", 'mod:item',
             [], [], [], [],
             ["ABC", "DEF", "GHI"]
         )
 
-        self.false_case2 = verify_data(
+        self.fcase2 = verify_data(
             "Shaped", 'mod:item',
             ["i", "i", "i", "i", "i", "i", "i", "i", "i"],
             [],
@@ -93,68 +92,66 @@ class TestUtil(unittest.TestCase):
             ["ABC", "DEF", "GHI"]
         )
 
-        self.false_case3 = verify_data(
+        self.fcase3 = verify_data(
             "Shaped", 'mod:item', [],
             ["b", "b", "b", "b", "b", "b", "b", "b", "b"],
             [],
             ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J'],
-            ["ABC", "DEF", "GHI"])
+            ["ABC", "DEF", "GHI"]
+        )
 
         # output verify
-        self.false_case4 = verify_data("Shaped", '', ["i"], [], ['#'], [],
-                                       ["###", "###", "###"])
-        self.false_case5 = verify_data("Shapeless", '', ["mod:item"], [])
-        self.false_case6 = verify_data("Shaped", 'item', ["i"], [], ['#'],
-                                       [], ["###", "###", "###"])
-        self.false_case7 = verify_data("Shapeless", 'item', ["mod:item"], [])
+        self.fcase4 = verify_data("Shaped", '', ["i"], [], ['#'], [],
+                                  ["###", "###", "###"])
+        self.fcase5 = verify_data("Shapeless", '', ["mod:item"], [])
+        self.fcase6 = verify_data("Shaped", 'item', ["i"], [], ['#'],
+                                  [], ["###", "###", "###"])
+        self.fcase7 = verify_data("Shapeless", 'item', ["mod:item"], [])
 
         # pattern verify
-        self.false_case8 = verify_data("Shaped", 'mod:item', [], [], [], [],
-                                       ["", "", ""])
+        self.fcase8 = verify_data("Shaped", 'mod:item', [], [], [], [],
+                                  ["", "", ""])
 
         # Shapeless Recipe
-        self.false_case9 = verify_data("Shapeless", "mod:item", [], [])
+        self.fcase9 = verify_data("Shapeless", "mod:item", [], [])
 
     def test_verify_data_true(self):
         # TRUE CASES
         # state
-        self.assertEqual("PASS", STATE[self.true_case1[0]], self.true_case1[1])
-        self.assertEqual("PASS", STATE[self.true_case2[0]], self.true_case2[1])
-        self.assertEqual("PASS", STATE[self.true_case3[0]], self.true_case3[1])
-        self.assertEqual("PASS", STATE[self.true_case4[0]], self.true_case4[1])
-        self.assertEqual("PASS", STATE[self.true_case5[0]], self.true_case5[1])
-        self.assertEqual("PASS", STATE[self.true_case6[0]], self.true_case6[1])
-        self.assertEqual("PASS", STATE[self.true_case7[0]], self.true_case7[1])
-        self.assertEqual("PASS", STATE[self.true_case8[0]], self.true_case8[1])
-        self.assertEqual("PASS", STATE[self.true_case9[0]], self.true_case9[1])
-        self.assertEqual("PASS", STATE[self.true_case10[0]],
-                         self.true_case10[1])
+        self.assertEqual("PASS", STATE[self.tcase1[0]], self.tcase1[1])
+        self.assertEqual("PASS", STATE[self.tcase2[0]], self.tcase2[1])
+        self.assertEqual("PASS", STATE[self.tcase3[0]], self.tcase3[1])
+        self.assertEqual("PASS", STATE[self.tcase4[0]], self.tcase4[1])
+        self.assertEqual("PASS", STATE[self.tcase5[0]], self.tcase5[1])
+        self.assertEqual("PASS", STATE[self.tcase6[0]], self.tcase6[1])
+        self.assertEqual("PASS", STATE[self.tcase7[0]], self.tcase7[1])
+        self.assertEqual("PASS", STATE[self.tcase8[0]], self.tcase8[1])
+        self.assertEqual("PASS", STATE[self.tcase9[0]], self.tcase9[1])
+        self.assertEqual("PASS", STATE[self.tcase10[0]], self.tcase10[1])
 
     def test_verify_data_false(self):
         # FALSE CASES
         # state
-        self.assertEqual("FAIL", STATE[self.false_case1[0]])
-        self.assertEqual("FAIL", STATE[self.false_case2[0]])
-        self.assertEqual("FAIL", STATE[self.false_case3[0]])
-        self.assertEqual("FAIL", STATE[self.false_case4[0]])
-        self.assertEqual("FAIL", STATE[self.false_case5[0]])
-        self.assertEqual("FAIL", STATE[self.false_case6[0]])
-        self.assertEqual("FAIL", STATE[self.false_case7[0]])
-        self.assertEqual("FAIL", STATE[self.false_case8[0]])
-        self.assertEqual("FAIL", STATE[self.false_case9[0]])
+        self.assertEqual("FAIL", STATE[self.fcase1[0]])
+        self.assertEqual("FAIL", STATE[self.fcase2[0]])
+        self.assertEqual("FAIL", STATE[self.fcase3[0]])
+        self.assertEqual("FAIL", STATE[self.fcase4[0]])
+        self.assertEqual("FAIL", STATE[self.fcase5[0]])
+        self.assertEqual("FAIL", STATE[self.fcase6[0]])
+        self.assertEqual("FAIL", STATE[self.fcase7[0]])
+        self.assertEqual("FAIL", STATE[self.fcase8[0]])
+        self.assertEqual("FAIL", STATE[self.fcase9[0]])
 
         # message
-        self.assertEqual("Number of keys doesn't match pattern.",
-                         self.false_case1[1])
-        self.assertEqual("Item key not in pattern.", self.false_case2[1])
-        self.assertEqual("Block key not in pattern.", self.false_case3[1])
-        self.assertEqual("Output is empty.", self.false_case4[1])
-        self.assertEqual("Output is empty.", self.false_case5[1])
-        self.assertEqual("Incorrect output format.", self.false_case6[1])
-        self.assertEqual("Incorrect output format.", self.false_case7[1])
-        self.assertEqual("Pattern is empty.", self.false_case8[1])
-        self.assertEqual("Both item input and block input are empty.",
-                         self.false_case9[1])
+        self.assertEqual("# of keys don't match pattern.", self.fcase1[1])
+        self.assertEqual("Item key not in pattern.", self.fcase2[1])
+        self.assertEqual("Block key not in pattern.", self.fcase3[1])
+        self.assertEqual("Output is empty.", self.fcase4[1])
+        self.assertEqual("Output is empty.", self.fcase5[1])
+        self.assertEqual("Incorrect output format.", self.fcase6[1])
+        self.assertEqual("Incorrect output format.", self.fcase7[1])
+        self.assertEqual("Pattern is empty.", self.fcase8[1])
+        self.assertEqual("Item and block input are empty.", self.fcase9[1])
 
 
 if __name__ == "__main__":

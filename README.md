@@ -18,7 +18,7 @@ Some future features that the program may contains:
 - Allows recipe editing as well as recipe creation
 
 ## Installation
-**Python 3.6** is required to run the program.
+**Python 3.7** is required to run the program.
 > To begin using the program, either clone the project or download it as a zip file: \
 > ```git clone https://github.com/larryworm1127/RecipeGenerator.git``` \
 > or use: \
@@ -37,4 +37,4 @@ Some future features that the program may contains:
 > ```
 > The above commands creates a virtual environment on the machine and activates the machine for running the program
 
-Once the installation is complete, run "gui.py" with Python 3.6 and the program is good to go!
+Once the installation is complete, run "gui.py" with Python 3.7 and the program is good to go!

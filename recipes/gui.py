@@ -14,7 +14,7 @@ from os.path import expanduser
 from tkinter import filedialog, messagebox
 
 from .util import create_shaped_json, create_shapeless_json, verify_data, STATE
-from .logger import get_logger
+from . import get_logger
 
 # constants
 LABEL_FONT = ("Courier", 14)

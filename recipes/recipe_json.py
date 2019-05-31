@@ -10,7 +10,7 @@ from json import dump
 from os.path import join, expanduser, exists
 from typing import Union
 
-from .logger import get_logger
+from . import get_logger
 from .recipe import ShapelessRecipe, ShapedRecipe
 
 __all__ = ["JsonRecipe"]

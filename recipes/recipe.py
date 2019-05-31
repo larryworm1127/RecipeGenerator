@@ -10,7 +10,7 @@ from copy import copy
 from logging import Logger
 from typing import Union, List, Dict
 
-from .logger import get_logger
+from . import get_logger
 
 __all__ = ["ShapelessRecipe", "ShapedRecipe"]
 
@@ -48,9 +48,6 @@ class ShapelessRecipe:
 
         # Logger
         self.logger = get_logger("recipe.recipe", self.debug)
-        self.init_log()
-
-    def init_log(self):
         self.logger.info("Shapeless recipe object created")
 
 
@@ -68,12 +65,10 @@ class ShapedRecipe(ShapelessRecipe):
                  block_input: Dict[str, str],
                  pattern: List[str],
                  count: int = 1,
-                 debug: bool = False):
+                 debug: bool = False) -> None:
         """Shaped recipe initializer.
         """
         super().__init__(name, output, item_input, block_input, count, debug)
         self.pattern = copy(pattern)
         self.type = "crafting_shaped"
-
-    def init_log(self):
         self.logger.info("Shaped recipe object created")

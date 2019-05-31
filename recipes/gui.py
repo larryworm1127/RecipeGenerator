@@ -13,16 +13,13 @@ import tkinter as tk
 from os.path import expanduser
 from tkinter import filedialog, messagebox
 
-from recipes.util import create_shaped_json, create_shapeless_json, \
-    verify_data, STATE
-from recipes.logger import get_logger
+from .util import create_shaped_json, create_shapeless_json, verify_data, STATE
+from .logger import get_logger
 
 # constants
 LABEL_FONT = ("Courier", 14)
 DEF_FONT = ("Courier", 12)
-TYPES = {1: "Shaped",
-         2: "Shapeless",
-         3: "Smelting"}
+TYPES = {1: "Shaped", 2: "Shapeless", 3: "Smelting"}
 
 # global variables
 preview_open = False

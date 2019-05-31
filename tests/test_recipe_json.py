@@ -7,9 +7,9 @@ Test module for json_generator.py module
 
 # general imports
 import unittest
+from json import load
 from os.path import exists, join
 from sys import path
-from json import load
 
 from recipes.recipe import ShapedRecipe, ShapelessRecipe
 from recipes.recipe_json import JsonRecipe
@@ -71,13 +71,13 @@ class TestJsonShaped(unittest.TestCase):
 
         # Shaped Recipes
         self.assertDictEqual(self.item_expected,
-                             self.json_item.get_json(), message)
+                             self.json_item.result, message)
         self.assertDictEqual(self.block_expected,
-                             self.json_block.get_json(), message)
+                             self.json_block.result, message)
         self.assertDictEqual(self.item_block_expected,
-                             self.json_item_block.get_json(), message)
+                             self.json_item_block.result, message)
         self.assertDictEqual(self.count_two_expected,
-                             self.json_count_two.get_json(), message)
+                             self.json_count_two.result, message)
 
     def test_generator(self):
         """Test whether JSON generator generates correct recipe file.
@@ -145,13 +145,13 @@ class TestJsonShapeless(unittest.TestCase):
 
         # Shapeless Recipes
         self.assertDictEqual(self.item_expected,
-                             self.json_item.get_json(), message)
+                             self.json_item.result, message)
         self.assertDictEqual(self.block_expected,
-                             self.json_block.get_json(), message)
+                             self.json_block.result, message)
         self.assertDictEqual(self.item_block_expected,
-                             self.json_item_block.get_json(), message)
+                             self.json_item_block.result, message)
         self.assertDictEqual(self.count_two_expected,
-                             self.json_count_two.get_json(), message)
+                             self.json_count_two.result, message)
 
     def test_generator(self):
         """Test whether JSON generator generates correct recipe file.

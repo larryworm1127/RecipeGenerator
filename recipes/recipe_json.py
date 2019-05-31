@@ -10,8 +10,8 @@ from json import dump
 from os.path import join, expanduser, exists
 from typing import Union
 
-from .recipe import ShapelessRecipe, ShapedRecipe
 from .logger import get_logger
+from .recipe import ShapelessRecipe, ShapedRecipe
 
 __all__ = ["JsonRecipe"]
 
@@ -25,21 +25,21 @@ class JsonRecipe:
 
     def __init__(self, recipe: Union[ShapedRecipe, ShapelessRecipe]):
         # initialize variables
-        self._recipe = recipe
-        self._name = recipe.name
-        self._type = recipe.type
+        self.recipe = recipe
+        self.name = recipe.name
+        self.type = recipe.type
         self._logger = get_logger("recipe_json.Json", recipe.debug)
 
         # actions for shaped recipe
-        if self._type == "crafting_shaped":
-            self._result = {"type": "minecraft:" + self._type, "pattern": [],
-                            "key": {}, "result": {}}
+        if self.type == "crafting_shaped":
+            self.result = {"type": "minecraft:" + self.type, "pattern": [],
+                           "key": {}, "result": {}}
             self.create_shaped_json()
 
         # actions for shapeless recipe
         else:
-            self._result = {"type": "minecraft:" + self._type,
-                            "ingredients": [], "result": {}}
+            self.result = {"type": "minecraft:" + self.type,
+                           "ingredients": [], "result": {}}
             self.create_shapeless_json()
 
     def __str__(self) -> str:
@@ -50,7 +50,7 @@ class JsonRecipe:
 
         # format strings
         count = 1
-        for key, item in self._result.items():
+        for key, item in self.result.items():
             # one item case - item is string
             if isinstance(item, str):
                 result += f"  {repr(key)}: {repr(item)} \n"
@@ -97,7 +97,7 @@ class JsonRecipe:
                     count_inner += 1
 
                 # determine whether to add comma at the end or not
-                if count == len(self._result):
+                if count == len(self.result):
                     result += "  } \n"
                 else:
                     result += "  }, \n"
@@ -118,7 +118,7 @@ class JsonRecipe:
                     count_inner += 1
 
                 # determine whether to add comma at the end or not
-                if count == len(self._result):
+                if count == len(self.result):
                     result += "  ] \n"
                 else:
                     result += "  ], \n"
@@ -129,74 +129,66 @@ class JsonRecipe:
 
         return result
 
-    def get_json(self) -> dict:
-        """Get method for json resultant"""
-        return self._result
-
-    def get_name(self) -> str:
-        """Get method for name of the recipe"""
-        return self._name
-
     def create_shaped_json(self) -> None:
-        """Creates a shaped recipe json using given recipe class
+        """Creates a shaped recipe json using given recipe class.
         """
         self._logger.info("Create shaped JSON recipe")
 
         # pattern
-        self._result["pattern"] = self._recipe.pattern
+        self.result["pattern"] = self.recipe.pattern
 
         # item ingredients
-        item_input = self._recipe.item_input
+        item_input = self.recipe.item_input
         if item_input is not None:
             for key, value in item_input.items():
-                self._result["key"][key] = {}
-                self._result["key"][key]["item"] = value
+                self.result["key"][key] = {}
+                self.result["key"][key]["item"] = value
 
         # block ingredients
-        block_input = self._recipe.block_input
+        block_input = self.recipe.block_input
         if block_input is not None:
             for key, value in block_input.items():
-                self._result["key"][key] = {}
-                self._result["key"][key]["block"] = value
+                self.result["key"][key] = {}
+                self.result["key"][key]["block"] = value
 
         # recipe output
-        output = self._recipe.output
-        self._result["result"]["item"] = output
-        self._result["result"]["count"] = int(self._recipe.output_count)
+        output = self.recipe.output
+        self.result["result"]["item"] = output
+        self.result["result"]["count"] = int(self.recipe.output_count)
 
     def create_shapeless_json(self) -> None:
-        """Creates a shapeless recipe json using given recipe class
+        """Creates a shapeless recipe json using given recipe class.
         """
         self._logger.info("Create shapeless JSON recipe")
 
         # item ingredients
-        item_input = self._recipe.item_input
+        item_input = self.recipe.item_input
         if item_input is not None:
             for value in item_input:
-                self._result["ingredients"].append({"item": value})
+                self.result["ingredients"].append({"item": value})
 
         # block ingredients
-        block_input = self._recipe.block_input
+        block_input = self.recipe.block_input
         if block_input is not None:
             for value in block_input:
-                self._result["ingredients"].append({"block": value})
+                self.result["ingredients"].append({"block": value})
 
         # recipe output
-        output = self._recipe.output
-        self._result["result"]["item"] = output
-        self._result["result"]["count"] = int(self._recipe.output_count)
+        output = self.recipe.output
+        self.result["result"]["item"] = output
+        self.result["result"]["count"] = int(self.recipe.output_count)
 
     def generator(self, base_path: str) -> bool:
-        """Creates the json file from the given dir path
+        """Creates the json file from the given dir path.
 
         :param base_path: the path of the directory
         :return: boolean of whether the file creation was successful
         """
         self._logger.info("Create JSON recipe file at given file location")
 
-        path = join(base_path, self._name + '.json')
+        path = join(base_path, self.name + '.json')
         with open(path, 'w') as outfile:
-            dump(self.get_json(), outfile)
+            dump(self.result, outfile)
 
         if exists(path):
             return True

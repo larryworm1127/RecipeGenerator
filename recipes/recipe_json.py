@@ -6,7 +6,7 @@ Python module that generates a JSON file for recipe created by the user
 """
 
 # general imports
-from json import dump
+from json import dump, dumps
 from os.path import join, expanduser, exists
 from typing import Union
 
@@ -32,102 +32,19 @@ class JsonRecipe:
 
         # actions for shaped recipe
         if self.type == "crafting_shaped":
-            self.result = {"type": "minecraft:" + self.type, "pattern": [],
+            self.result = {"type": f"minecraft: {self.type}", "pattern": [],
                            "key": {}, "result": {}}
             self.create_shaped_json()
 
         # actions for shapeless recipe
         else:
-            self.result = {"type": "minecraft:" + self.type,
+            self.result = {"type": f"minecraft: {self.type}",
                            "ingredients": [], "result": {}}
             self.create_shapeless_json()
 
     def __str__(self) -> str:
         self._logger.info("Create string representation of JSON recipe")
-
-        # variables
-        result = "{ \n"
-
-        # format strings
-        count = 1
-        for key, item in self.result.items():
-            # one item case - item is string
-            if isinstance(item, str):
-                result += f"  {repr(key)}: {repr(item)} \n"
-
-            # multiple item case - item is dict
-            elif isinstance(item, dict):
-                result += "  " + repr(key) + ': { \n'
-
-                # loop through the first inner dict
-                count_inner = 1
-                for item_key, value in item.items():
-
-                    # inner dict item is not dict
-                    if isinstance(value, dict):
-                        result += "    " + repr(item_key) + ': { \n'
-                        count_inner_two = 1
-                        for item_key_two, value_two in value.items():
-
-                            # determine whether to add comma at the end or not
-                            if count_inner_two == len(value):
-                                result += f"      {repr(item_key_two)}: " \
-                                          f"{repr(value_two)} \n"
-                            else:
-                                result += f"      {repr(item_key_two)}: " \
-                                          f"{repr(value_two)}, \n"
-
-                            count_inner_two += 1
-
-                        # determine whether to add comma at the end or not
-                        if count_inner == len(item):
-                            result += "    } \n"
-                        else:
-                            result += "    }, \n"
-
-                    # inner dict item is dict
-                    else:
-
-                        # determine whether to add comma at the end or not
-                        if count_inner == len(item):
-                            result += f"    {repr(item_key)}: {repr(value)} \n"
-                        else:
-                            result += f"    {repr(item_key)}: {repr(value)}, \n"
-
-                    count_inner += 1
-
-                # determine whether to add comma at the end or not
-                if count == len(self.result):
-                    result += "  } \n"
-                else:
-                    result += "  }, \n"
-
-            # multiple item case - item is list
-            else:
-                result += f"  {repr(key)}: [ \n"
-
-                count_inner = 1
-                for value in item:
-
-                    # determine whether to add comma at the end or not
-                    if count_inner == len(item):
-                        result += f"    {repr(value)} \n"
-                    else:
-                        result += f"    {repr(value)}, \n"
-
-                    count_inner += 1
-
-                # determine whether to add comma at the end or not
-                if count == len(self.result):
-                    result += "  ] \n"
-                else:
-                    result += "  ], \n"
-
-            count += 1
-
-        result += "}"
-
-        return result
+        return dumps(self.result, indent=2)
 
     def create_shaped_json(self) -> None:
         """Creates a shaped recipe json using given recipe class.

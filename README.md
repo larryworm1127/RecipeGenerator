@@ -37,4 +37,4 @@ Some future features that the program may contains:
 > ```
 > The above commands creates a virtual environment on the machine and activates the machine for running the program
 
-Once the installation is complete, run "gui.py" with Python 3.7 and the program is good to go!
+Once the installation is complete, run "run.py" with Python 3.7 and the program is good to go!

@@ -7,6 +7,7 @@ Python module containing all class for Tkinter GUI
 import tkinter as tk
 from tkinter import filedialog, messagebox
 
+from recipes.recipe_json import JsonRecipe
 from . import get_logger
 from .util import create_shaped_json, create_shapeless_json, verify_data, STATE
 
@@ -23,7 +24,9 @@ preview_open = False
 class IntroPage:
     """Class for Type Selecting Page"""
 
-    def __init__(self, master, directory):
+    def __init__(self, master: tk.Tk, directory: str) -> None:
+        """Initializer.
+        """
         # VARIABLES
         self._master = master
         self._dir_path = directory
@@ -73,7 +76,7 @@ class IntroPage:
         self._browse_button.grid(row=1, column=3)
         self._file_path_entry.grid(row=0, column=3)
 
-    def next_step(self):
+    def next_step(self) -> None:
         """Event handler for Next button"""
 
         self._logger.info("Next button pressed")
@@ -96,7 +99,7 @@ class IntroPage:
             new_root = tk.Tk()
             MainPage(new_root, TYPES[self._choice.get()], self._dir_path)
 
-    def browse_csv(self):
+    def browse_csv(self) -> None:
         """ Event handler for Browse button"""
 
         self._logger.info("Browse files")
@@ -110,7 +113,7 @@ class IntroPage:
 class MainPage:
     """Class for Main Page"""
 
-    def __init__(self, master, recipe_type, dir_path):
+    def __init__(self, master: tk.Tk, recipe_type: str, dir_path: str) -> None:
         # VARIABLES
         # gui related
         self._master = master
@@ -194,7 +197,7 @@ class MainPage:
         self._back_button.grid(row=14, column=0)
         self._reset_button.grid(row=14, column=4, sticky=tk.W)
 
-    def shaped_layout(self):
+    def shaped_layout(self) -> None:
         """Helper function for setting up GUI for shaped recipe"""
 
         self._logger.info("Initialize shaped recipe GUI layout")
@@ -234,9 +237,9 @@ class MainPage:
             self._block_key_entries[index].grid(row=4 + index, column=4,
                                                 sticky=tk.W)
 
-    def shapeless_layout(self):
-        """Helper function for setting up GUI for shapeless recipe"""
-
+    def shapeless_layout(self) -> None:
+        """Helper function for setting up GUI for shapeless recipe
+        """
         self._logger.info("Initialize shapeless recipe GUI layout")
 
         # row and column config
@@ -250,9 +253,9 @@ class MainPage:
         self._output_entry.grid(row=0, column=1)
         self._output_count_entry.grid(row=1, column=1)
 
-    def preview(self):
-        """Event handler for Preview button"""
-
+    def preview(self) -> None:
+        """Event handler for Preview button
+        """
         global preview_open
 
         self._logger.info("Preview")
@@ -269,9 +272,9 @@ class MainPage:
         self._preview_class = PreviewPage(new_root, json_object)
         preview_open = True
 
-    def back(self):
-        """Event handler for Back button"""
-
+    def back(self) -> None:
+        """Event handler for Back button
+        """
         self._logger.info("Back")
         message = "All the data typed in will be lost if you choose to go back!"
         choice = tk.messagebox.askokcancel("Warning!", message)
@@ -283,8 +286,9 @@ class MainPage:
             new_root = tk.Tk()
             IntroPage(new_root, self._dir_path)
 
-    def reset(self):
-        """Event handler for Reset Button"""
+    def reset(self) -> None:
+        """Event handler for Reset Button
+        """
         self._logger.info("Reset")
         message = "All the data typed in will be lost if you choose to reset!"
         choice = tk.messagebox.askokcancel("Warning!", message)
@@ -295,9 +299,9 @@ class MainPage:
             new_root = tk.Tk()
             MainPage(new_root, self._type, self._dir_path)
 
-    def create(self):
-        """Event handler for Create button"""
-
+    def create(self) -> None:
+        """Event handler for Create button
+        """
         self._logger.info("Create")
         recipe_json = self.collect_and_verify_data()
 
@@ -311,9 +315,9 @@ class MainPage:
             message = "The creation of the file has failed."
             tk.messagebox.showerror("Error!", message)
 
-    def collect_and_verify_data(self):
-        """Collect the data from entries and return the data to the caller"""
-
+    def collect_and_verify_data(self) -> JsonRecipe:
+        """Collect the data from entries and return the data to the caller
+        """
         self._logger.info("Collect and verify data")
 
         # Retrieve Data from Entries
@@ -345,14 +349,11 @@ class MainPage:
 
             # pattern
             pattern = []
-            for row in range(3):
+            for row in self._pattern_entries:
                 string_row = ""
-                for column in range(3):
-                    entry_input = self._pattern_entries[row][column].get()
-                    if entry_input == '':
-                        string_row += ' '
-                    else:
-                        string_row += entry_input
+                for input_box in row:
+                    entry_input = input_box.get()
+                    string_row += ' ' if entry_input == '' else entry_input
 
                 pattern.append(string_row)
 
@@ -361,9 +362,16 @@ class MainPage:
                                          item_keys, block_keys, pattern)
             if STATE[state] == "PASS":
                 self._logger.info("Data verified")
-                recipe_json = create_shaped_json(output.split(':')[1], output,
-                                                 output_count, items, blocks,
-                                                 item_keys, block_keys, pattern)
+                recipe_json = create_shaped_json(
+                    name=output.split(':')[1],
+                    output=output,
+                    output_count=output_count,
+                    items=items,
+                    blocks=blocks,
+                    item_key=item_keys,
+                    block_key=block_keys,
+                    pattern=pattern
+                )
             else:
                 self._logger.error(message)
                 tk.messagebox.showerror("Error!", message)
@@ -375,9 +383,13 @@ class MainPage:
             state, message = verify_data(self._type, output, items, blocks)
             if STATE[state] == "PASS":
                 self._logger.info("Data verified")
-                recipe_json = create_shapeless_json(output.split(':')[1],
-                                                    output, output_count, items,
-                                                    blocks)
+                recipe_json = create_shapeless_json(
+                    name=output.split(':')[1],
+                    output=output,
+                    output_count=output_count,
+                    items=items,
+                    blocks=blocks
+                )
             else:
                 self._logger.error(message)
                 tk.messagebox.showerror("Error!", message)
@@ -385,9 +397,9 @@ class MainPage:
 
         return recipe_json
 
-    def confirm_close(self):
-        """Event handler for Exiting the GUI"""
-
+    def confirm_close(self) -> None:
+        """Event handler for Exiting the GUI
+        """
         self._master.destroy()
 
         # close preview window if it is open
@@ -400,7 +412,9 @@ class MainPage:
 class PreviewPage:
     """Class for Preview Page"""
 
-    def __init__(self, master, json_object):
+    def __init__(self, master: tk.Tk, json_object: JsonRecipe) -> None:
+        """Initializer.
+        """
         # VARIABLES
         # gui related
         self.master = master
@@ -421,9 +435,9 @@ class PreviewPage:
         self._logger.info("Initialize GUI layout")
         self._text.pack(side=tk.LEFT, fill=tk.Y)
 
-    def confirm_close(self):
-        """Event handler for Exiting the GUI"""
-
+    def confirm_close(self) -> None:
+        """Event handler for Exiting the GUI
+        """
         global preview_open
 
         self.master.destroy()

@@ -13,8 +13,8 @@ from recipes.recipe import ShapedRecipe, ShapelessRecipe
 from recipes.recipe_json import JsonRecipe
 
 # path constant
-GEN_PATH = join(path[0], 'json_generator_folder')
-RES_PATH = join(path[0], 'json_results')
+GEN_PATH = join(path[0], 'tests', 'json_generator_folder')
+RES_PATH = join(path[0], 'tests', 'json_results')
 
 
 class TestJsonShaped(unittest.TestCase):

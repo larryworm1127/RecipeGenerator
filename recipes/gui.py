@@ -6,15 +6,11 @@ Python module containing all class for Tkinter GUI
 """
 
 # general imports
-from __future__ import absolute_import
-
 import tkinter as tk
-
-from os.path import expanduser
 from tkinter import filedialog, messagebox
 
-from .util import create_shaped_json, create_shapeless_json, verify_data, STATE
 from . import get_logger
+from .util import create_shaped_json, create_shapeless_json, verify_data, STATE
 
 # constants
 LABEL_FONT = ("Courier", 14)
@@ -434,10 +430,3 @@ class PreviewPage:
 
         self.master.destroy()
         preview_open = False
-
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    path = expanduser('~')
-    gui = IntroPage(root, path)
-    root.mainloop()

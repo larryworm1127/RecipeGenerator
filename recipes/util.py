@@ -9,13 +9,19 @@ from typing import Tuple, List
 from .recipe import ShapedRecipe, ShapelessRecipe
 from .recipe_json import JsonRecipe
 
-__all__ = ["verify_data", "create_shaped_json", "create_shapeless_json",
-           "STATE"]
+__all__ = [
+    "verify_data",
+    "create_shaped_json",
+    "create_shapeless_json",
+    "STATE"
+]
 
 # constants
-STATE = {0: "PASS",
-         1: "WARNING",
-         2: "FAIL"}
+STATE = {
+    0: "PASS",
+    1: "WARNING",
+    2: "FAIL"
+}
 
 LOGGING_LEVEL = {
     1: "DEBUG",

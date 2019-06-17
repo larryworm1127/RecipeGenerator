@@ -72,10 +72,10 @@ class JsonRecipe:
                             # determine whether to add comma at the end or not
                             if count_inner_two == len(value):
                                 result += f"      {repr(item_key_two)}: " \
-                                    f"{repr(value_two)} \n"
+                                          f"{repr(value_two)} \n"
                             else:
                                 result += f"      {repr(item_key_two)}: " \
-                                    f"{repr(value_two)}, \n"
+                                          f"{repr(value_two)}, \n"
 
                             count_inner_two += 1
 

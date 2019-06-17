@@ -32,7 +32,8 @@ class JsonRecipe:
     logger: logging.Logger
 
     def __init__(self, recipe: Union[ShapedRecipe, ShapelessRecipe]) -> None:
-        # initialize variables
+        """Initializer.
+        """
         self.recipe = recipe
         self.logger = get_logger("recipe_json.Json", recipe.debug)
 

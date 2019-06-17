@@ -1,5 +1,5 @@
 # Recipe Generator
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/df81ed1cc0f24478bfec594fcb4a7b96)](https://www.codacy.com/app/larryworm1127/RecipeGenerator?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=larryworm1127/RecipeGenerator&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4c0712f1845f4abcb6f1b0d9ab55d2f9)](https://app.codacy.com/app/larryworm1127/RecipeGenerator?utm_source=github.com&utm_medium=referral&utm_content=larryworm1127/RecipeGenerator&utm_campaign=badger)
 [![CircleCI](https://circleci.com/gh/larryworm1127/RecipeGenerator.svg?style=svg)](https://circleci.com/gh/larryworm1127/RecipeGenerator)
 
 ## About

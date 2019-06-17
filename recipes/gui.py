@@ -4,8 +4,6 @@ Python module containing all class for Tkinter GUI
 @date: 5/25/2018
 @author: Larry Shi
 """
-
-# general imports
 import tkinter as tk
 from tkinter import filedialog, messagebox
 

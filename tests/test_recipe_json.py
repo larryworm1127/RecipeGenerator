@@ -4,8 +4,6 @@ Test module for json_generator.py module
 @date: 5/24/2018
 @author: Larry Shi
 """
-
-# general imports
 import unittest
 from json import load
 from os.path import exists, join
@@ -15,8 +13,8 @@ from recipes.recipe import ShapedRecipe, ShapelessRecipe
 from recipes.recipe_json import JsonRecipe
 
 # path constant
-GEN_PATH = join(path[0], 'tests', 'json_generator_folder')
-RES_PATH = join(path[0], 'tests', 'json_results')
+GEN_PATH = join(path[0], 'json_generator_folder')
+RES_PATH = join(path[0], 'json_results')
 
 
 class TestJsonShaped(unittest.TestCase):
@@ -51,9 +49,13 @@ class TestJsonShaped(unittest.TestCase):
         )
 
         self.json_item = JsonRecipe(self.item)
+        self.json_item.create_shaped_json()
         self.json_block = JsonRecipe(self.block)
+        self.json_block.create_shaped_json()
         self.json_item_block = JsonRecipe(self.item_block)
+        self.json_item_block.create_shaped_json()
         self.json_count_two = JsonRecipe(self.count_two)
+        self.json_count_two.create_shaped_json()
 
         with open(join(RES_PATH, 'shaped_item_only.json')) as f:
             self.item_expected = load(f)
@@ -125,9 +127,13 @@ class TestJsonShapeless(unittest.TestCase):
         )
 
         self.json_item = JsonRecipe(self.item)
+        self.json_item.create_shapeless_json()
         self.json_block = JsonRecipe(self.block)
+        self.json_block.create_shapeless_json()
         self.json_item_block = JsonRecipe(self.item_block)
+        self.json_item_block.create_shapeless_json()
         self.json_count_two = JsonRecipe(self.count_two)
+        self.json_count_two.create_shapeless_json()
 
         with open(join(RES_PATH, 'shapeless_item_only.json')) as f:
             self.item_expected = load(f)

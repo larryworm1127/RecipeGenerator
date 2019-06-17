@@ -4,8 +4,6 @@ Python module that contains two classes for Shaped and Shapeless recipes
 @date: 5/16/2018
 @author: Larry Shi
 """
-
-# general import
 from copy import copy
 from logging import Logger
 from typing import Union, List, Dict

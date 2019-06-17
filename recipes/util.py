@@ -128,6 +128,7 @@ def create_shaped_json(name: str,
     recipe_object = ShapedRecipe(name, output, item_input, block_input, pattern,
                                  output_count)
     json_object = JsonRecipe(recipe_object)
+    json_object.create_shaped_json()
 
     # return json object for other uses
     return json_object
@@ -150,6 +151,7 @@ def create_shapeless_json(name: str,
     # create json object
     recipe_object = ShapelessRecipe(name, output, items, blocks, output_count)
     json_object = JsonRecipe(recipe_object)
+    json_object.create_shapeless_json()
 
     # return json object for other uses
     return json_object
